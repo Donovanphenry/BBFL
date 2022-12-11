@@ -9,7 +9,12 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const NavBar = () => {
+const NavBar = (props) => {
+  const {
+    tabDrawerOpen,
+    setShowTabDrawer
+  } = props;
+
 	return (
 		<Box sx = {{flexGrow: 1}}>
       <AppBar position = 'static'>
@@ -20,6 +25,7 @@ const NavBar = () => {
             color = 'inherit'
             aria-label = 'menu'
             sx = {{mr: 2}}
+            onClick = {() => setShowTabDrawer(!tabDrawerOpen)}
           >
             <MenuIcon />
           </IconButton>
