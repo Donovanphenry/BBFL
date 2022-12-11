@@ -1,0 +1,27 @@
+.container
+{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.matches-container
+{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap: 20px;
+}
+
+.button-container
+{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.select-picks-button
+{
+  width: 200px;
+  height: 40px;
+}

@@ -12,19 +12,13 @@ import {
   Picks
 } from './components';
 
-import {
-  get_matchups
-} from './Utils/espn-api-parser.ts';
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const players = require('./data/players.json')
 
-function App() {
+const App = () => {
   const [showTabDrawer, setShowTabDrawer] = useState(false);
   const [matchups, setMatchups] = useState(null);
-
-
 
   return (
     <div className="App">

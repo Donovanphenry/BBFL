@@ -59,6 +59,7 @@ const get_competitors = async (evt) => {
     const record_data = await record_res.json();
 
     competitor['record'] = record_data.items[0].summary;
+    competitor['pick'] = 'none';
 
     delete competitor['obj'];
   }
