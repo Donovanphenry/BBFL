@@ -9,10 +9,19 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import {
+  useNavigate
+} from 'react-router-dom';
+
+import './NavBar.css';
+
 const NavBar = (props) => {
+  const navigate = useNavigate();
   const {
     tabDrawerOpen,
-    setShowTabDrawer
+    setShowTabDrawer,
+    setLoginOpen,
+    username
   } = props;
 
 	return (
@@ -30,12 +39,14 @@ const NavBar = (props) => {
             <MenuIcon />
           </IconButton>
 
-          <Typography sx = {{flexGrow: 1}}>
-            Binky League
-          </Typography>
+          <div className = 'league-icon-container'>
+            <Typography className = 'league-icon' onClick = {() => navigate('')}>
+             Binky League
+            </Typography>
+          </div>
 
-          <Button color = 'inherit'>
-            Login
+          <Button color = 'inherit' onClick = {() => setLoginOpen(true)}>
+            {username ? username : 'Login'}
           </Button>
         </Toolbar>
       </AppBar>

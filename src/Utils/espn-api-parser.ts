@@ -1,4 +1,4 @@
-const get_matchups = async (setMatchups) => {
+const get_fixtures = async (setFixtures) => {
   const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
   const res = await fetch(url);
   const data = await res.json();
@@ -12,12 +12,22 @@ const get_matchups = async (setMatchups) => {
   const events_data = await events_res.json();
   const events = events_data.items;
 
-  const competitors = await Promise.all(events.map(evt => get_competitors(evt)));
+  const fixtures = await Promise.all(events.map(evt => extract_fixtures(evt)));
 
-  setMatchups(competitors);
+  fixtures.sort((a, b) => {
+    if (a.kickoff_time < b.kickoff_time)
+      return -1;
+    if (a.kickoff_time > b.kickoff_time)
+      return 1;
+    if (a.competitors.away.name < b.competitors.away.name)
+      return -1;
+    return 1;
+  });
+
+  setFixtures(fixtures);
 };
 
-const get_competitors = async (evt) => {
+const extract_fixtures = async (evt) => {
   const match_url = evt['$ref'];
   const match_res = await fetch(match_url);
   const match_data = await match_res.json();
@@ -64,7 +74,12 @@ const get_competitors = async (evt) => {
     delete competitor['obj'];
   }
 
-  return competitors;
+  const fixture = {
+    competitors: competitors,
+    kickoff_time: match_data.date
+  };
+
+  return fixture;
 };
 
-export { get_matchups };
+export { get_fixtures };

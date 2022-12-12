@@ -1,18 +1,22 @@
 {
     "Donovan": {
         "score": 9,
-        "picks": []
+        "picks": [],
+        "password": "binky;"
     },
     "Max": {
         "score": 8,
-        "picks": []
+        "picks": [],
+        "password": "$bowl"
     },
     "Miles": {
         "score": 4,
-        "picks": []
+        "picks": [],
+        "password": "@hugo"
     },
     "Michael": {
         "score": 4,
-        "picks": []
+        "picks": [],
+        "password": "mybussybloody%"
     }
 }

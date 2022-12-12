@@ -11,41 +11,65 @@ import {
 } from '@mui/material';
 
 import {
-  get_matchups
+  get_fixtures
 } from '../../Utils/espn-api-parser.ts';
 
 import './Picks.css';
 
-const Picks = () => {
-  const [matchups, setMatchups] = useState([]);
+const Picks = ({username, players, picks, setPicks}) => {
+  const [fixtures, setFixtures] = useState([]);
 
   useEffect(() => {
-   get_matchups(setMatchups);
+   get_fixtures(setFixtures);
+
   }, []);
 
   const cancel_picks = () => {
-    const matchups_copy = JSON.parse(JSON.stringify(matchups));
+    const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
 
-    for (const matchup_idx in matchups_copy)
+    for (const matchup_idx in fixtures_copy)
     {
-      const matchup = matchups_copy[matchup_idx];
-      for (const team in matchup)
-        matchup[team].pick = 'none';
+      const matchup = fixtures_copy[matchup_idx];
+      for (const team in matchup.competitors)
+        matchup.competitors[team].pick = 'none';
     }
 
-    setMatchups(matchups_copy);
+    setFixtures(fixtures_copy);
   };
 
   const submit_picks = () => {
     // Make endpoint call
-    console.log('submit stuff');
+    const winners = new Set();
+    const losers = new Set();
+
+    for (const fixture_idx in fixtures)
+    {
+      const fixture = fixtures[fixture_idx];
+      for (const team in fixture.competitors)
+      {
+        const team_name = fixture.competitors[team].name;
+        if (fixture.competitors[team].pick === 'win')
+          winners.add(team_name);
+        if (fixture.competitors[team].pick === 'lose')
+          losers.add(team_name);
+      }
+    }
+
+    const picks = {
+      winners: winners,
+      losers: losers
+    };
+    players[username].picks = picks;
+
+    const players_json = JSON.stringify(players);
+    localStorage.setItem('players', players_json);
   }
 
-  return matchups && (
+  return fixtures && (
     <div className = 'container'>
       <div className = 'matches-container'>
         {
-          matchups.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} matchups = {matchups} setMatchups = {setMatchups} match = {match} />)
+          fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players} username = {username}/>)
         }
       </div>
 

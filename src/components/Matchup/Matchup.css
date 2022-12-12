@@ -1,4 +1,4 @@
-.match-container
+.fixture-container
 {
   padding: 20px;
   display: flex;
@@ -37,4 +37,9 @@
 {
   aspect-ratio: 1 / 1;
   width: 100%;
+}
+
+.kickoff-time
+{
+  font-style: italic;
 }
