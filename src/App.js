@@ -1,8 +1,6 @@
 import {
   useState,
-  useEffect
 } from 'react'
-import logo from './logo.svg';
 import './App.css';
 import {
 	NavBar,
@@ -10,7 +8,8 @@ import {
   Login,
   Home,
   LeagueScore,
-  Picks
+  Picks,
+    Rules
 } from './components';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -20,7 +19,6 @@ const players = require('./data/players.json');
 const App = () => {
   const [showTabDrawer, setShowTabDrawer] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-  const [matchups, setMatchups] = useState(null);
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
   const players = JSON.parse(localStorage.getItem('players')) || require('./data/players.json');
 
@@ -48,6 +46,7 @@ const App = () => {
           <Route index element = {<Home />} />
           <Route path = 'league-score' element = {<LeagueScore />} />
           <Route path = 'picks' element = {<Picks players = {players} username = {username}/>} />
+            <Route path = 'rules' element = {<Rules/>}/>
         </Routes>
       </Router>
     </div>

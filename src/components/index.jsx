@@ -4,3 +4,4 @@ export { LeagueScore } from './LeagueScore';
 export { Picks } from './Picks';
 export { TabDrawer } from './TabDrawer';
 export { Login } from './Login';
+export { Rules } from './Rules';

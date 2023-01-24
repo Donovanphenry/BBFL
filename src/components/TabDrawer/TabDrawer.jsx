@@ -27,6 +27,10 @@ const TabDrawer = (props) => {
       name: 'Check League Score',
       path: 'league-score'
     },
+    {
+      name: 'Rules',
+      path: 'rules'
+    }
   ];
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,20 +45,28 @@ const TabDrawer = (props) => {
       variant = 'temporary'
       open = {showTabDrawer}
       onClose = {() => setShowTabDrawer(false)}
+      className = 'drawer-container'
+        PaperProps={{
+            sx: {
+                background: "#252627",
+                width: 250,
+            }
+        }}
     >
       <div
         className = 'pages-container'
       >
         {
           pages.map(page => `/${page.path}` !== location.pathname && (
-            <Button
-              variant = 'contained'
-              className = 'page-button'
-              onClick = {() => movePage(page.path)}
-              key = {page.name}
-            >
-              {page.name}
-            </Button>
+                <Button
+                  variant = 'outlined'
+                    color = 'inherit'
+                  className = 'page-button'
+                  onClick = {() => movePage(page.path)}
+                  key = {page.name}
+                >
+                  {page.name}
+                </Button>
           ))
         }
       </div>

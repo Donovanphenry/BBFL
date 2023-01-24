@@ -6,7 +6,6 @@ import {
 import {Matchup} from '../Matchup';
 
 import {
-  Paper,
   Button
 } from '@mui/material';
 

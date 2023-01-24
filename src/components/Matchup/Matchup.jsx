@@ -5,13 +5,11 @@ import {
 import {
   Paper,
   Typography,
-  Card
 } from '@mui/material';
 
 import './Matchup.css';
 
 const Matchup = ({players, username, match, match_index, fixtures, setFixtures}) => {
-  const [winner, setWinner] = useState(null);
 
   const changeWinner = (team_selections) => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
@@ -23,7 +21,7 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
     for (const {team, pick} of team_selections)
     {
       const curr_pick = fixture_copy.competitors[team]['pick'];
-      if (pick == curr_pick)
+      if (pick === curr_pick)
         fixture_copy.competitors[team]['pick'] = 'none';
       else
         fixture_copy.competitors[team]['pick'] = pick;
@@ -33,7 +31,7 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
   };
 
   const get_team_class = (team) => {
-    if (team.pick == 'none')
+    if (team.pick === 'none')
       return '';
     if (team.pick === 'win')
       return 'winning-team';

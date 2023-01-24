@@ -26,7 +26,7 @@ const NavBar = (props) => {
 
 	return (
 		<Box sx = {{flexGrow: 1}}>
-      <AppBar position = 'static'>
+      <AppBar position = 'static' sx = {{background: '#3f51b5'}}>
         <Toolbar>
           <IconButton
             size = 'large'

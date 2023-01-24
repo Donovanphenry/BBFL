@@ -45,7 +45,6 @@ const extract_fixtures = async (evt) => {
       obj: c2
     }
   };
-  let [home_obj, away_obj] = [c1, c2];
   if (c1.homeAway !== 'home')
     [competitors.home.obj, competitors.away.obj] = [c2, c1];
 
