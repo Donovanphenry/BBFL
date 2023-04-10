@@ -3,6 +3,11 @@ import {
   useState
 } from 'react';
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 import {Matchup} from '../Matchup';
 
 import {
@@ -13,10 +18,15 @@ import {
   get_fixtures
 } from '../../Utils/espn-api-parser.ts';
 
+import { getNHLPlayoffTeams } from '../../Utils/nhl-api-parser.ts'
+
 import './Picks.css';
+
+getNHLPlayoffTeams();
 
 const Picks = ({username, players, picks, setPicks}) => {
   const [fixtures, setFixtures] = useState([]);
+  const [league, setLeague] = useState('NFL');
 
   useEffect(() => {
    get_fixtures(setFixtures);
@@ -66,6 +76,24 @@ const Picks = ({username, players, picks, setPicks}) => {
 
   return fixtures && (
     <div className = 'container'>
+      <FormControl className = 'league-select' variant="standard" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel sx={{color: 'inherit'}}>League</InputLabel>
+        <Select
+          value={league}
+          onChange={(e) => setLeague(e.target.value)}
+          label="League"
+          className='league-holster'
+          sx={{color: 'inherit'}}
+        >
+          <MenuItem value="" className='league-option'>
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={'NBA'} className='league-option'>NBA</MenuItem>
+          <MenuItem value={'NFL'} className='league-option'>NFL</MenuItem>
+          <MenuItem value={'NHL'} className='league-option'>NHL</MenuItem>
+        </Select>
+      </FormControl>
+
       <div className = 'matches-container'>
         {
           fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players} username = {username}/>)
