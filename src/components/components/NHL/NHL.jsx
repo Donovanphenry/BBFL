@@ -3,6 +3,7 @@ import {
   useEffect
 } from 'react';
 
+import { Bracket, BracketGame } from 'react-tournament-bracket';
 import { SingleEliminationBracket, Match } from '@g-loot/react-tournament-brackets';
 import {
   Button

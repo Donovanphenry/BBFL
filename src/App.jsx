@@ -13,14 +13,14 @@ import {
 } from './components';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-const players = require('./data/players.json');
+import players_data from './data/players.json';
 
 const App = () => {
   const [showTabDrawer, setShowTabDrawer] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
-  const players = JSON.parse(localStorage.getItem('players')) || require('./data/players.json');
+  const persisted_players = localStorage.getItem('players');
+  const players = persisted_players ? JSON.parse(persisted_players) : players_data;
 
   return (
     <div className="App">

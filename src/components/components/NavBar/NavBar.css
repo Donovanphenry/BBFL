@@ -1,0 +1,14 @@
+.league-icon-container
+{
+  flex-grow: 1;
+}
+
+.league-icon
+{
+  display: inline;
+}
+
+.league-icon:hover
+{
+  cursor: pointer;
+}

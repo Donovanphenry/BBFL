@@ -6,7 +6,7 @@
   padding: 20px;
 }
 
-.matches-container
+.nfl-container
 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -29,5 +29,5 @@
 .league-select
 {
   color: white;
-  width: 200px;
+  width: 500px;
 }

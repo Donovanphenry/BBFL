@@ -1,0 +1,271 @@
+[
+  {
+    "id": 15,
+    "name": "Round 1 - Match 7",
+    "nextMatchId": 7,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 0,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Boston Bruins",
+        "round_id": 15,
+        "seed": 1
+      },
+      {
+        "id": 7,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Florida Panthers",
+        "round_id": 15,
+        "seed": 8
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Round 1 - Match 6",
+    "nextMatchId": 7,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 1,
+        "resultText": "",
+        "isWinner": false,
+        "name": "New Jersey Devils",
+        "round_id": 14,
+        "seed": 3
+      },
+      {
+        "id": 6,
+        "resultText": "",
+        "isWinner": false,
+        "name": "New York Rangers",
+        "round_id": 14,
+        "seed": 5
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Round 1 - Match 5",
+    "nextMatchId": 6,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 2,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Tampa Bay Lightning",
+        "round_id": 13,
+        "seed": 6
+      },
+      {
+        "id": 5,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Toronto Maple Leafs",
+        "round_id": 13,
+        "seed": 4
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Round 1 - Match 4",
+    "nextMatchId": 6,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 3,
+        "resultText": "",
+        "isWinner": false,
+        "name": "New York Islanders",
+        "round_id": 12,
+        "seed": 7
+      },
+      {
+        "id": 4,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Carolina Hurricanes",
+        "round_id": 12,
+        "seed": 2
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Round 1 - Match 3",
+    "nextMatchId": 5,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 8,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Colorado Avalanche",
+        "round_id": 11,
+        "seed": 2
+      },
+      {
+        "id": 15,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Seattle Kraken",
+        "round_id": 11,
+        "seed": 7
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Round 1 - Match 2",
+    "nextMatchId": 5,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 9,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Dallas Stars",
+        "round_id": 10,
+        "seed": 4
+      },
+      {
+        "id": 14,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Minnesota Wild",
+        "round_id": 10,
+        "seed": 6
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Round 1 - Match 1",
+    "nextMatchId": 4,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 10,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Los Angeles Kings",
+        "round_id": 9,
+        "seed": 6
+      },
+      {
+        "id": 13,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Edmonton Oilers",
+        "round_id": 9,
+        "seed": 3
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Round 1 - Match 0",
+    "nextMatchId": 4,
+    "tournamentRoundText": "1",
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "participants": [
+      {
+        "id": 11,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Winnipeg Jets",
+        "round_id": 8
+      },
+      {
+        "id": 12,
+        "resultText": "",
+        "isWinner": false,
+        "name": "Vegas Golden Knights",
+        "round_id": 8
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Round 2 - Match 3",
+    "nextMatchId": 3,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 6,
+    "name": "Round 2 - Match 2",
+    "nextMatchId": 3,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 5,
+    "name": "Round 2 - Match 1",
+    "nextMatchId": 2,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 4,
+    "name": "Round 2 - Match 0",
+    "nextMatchId": 2,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 3,
+    "name": "Round 3 - Match 1",
+    "nextMatchId": 1,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 2,
+    "name": "Round 3 - Match 0",
+    "nextMatchId": 1,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  },
+  {
+    "id": 1,
+    "name": "Finals",
+    "nextMatchId": null,
+    "state": "SCHEDULED",
+    "start_time": "2021-05-30",
+    "tournamentRoundText": "2",
+    "participants": []
+  }
+]
