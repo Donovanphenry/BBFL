@@ -1,1 +1,1 @@
-export {default as Matchup} from './Matchup';
+export {default as NHL} from './NHL';

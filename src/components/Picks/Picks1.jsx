@@ -9,6 +9,9 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import {Matchup} from '../Matchup';
+import {NFL} from '../NFL';
+import {NHL} from '../NHL';
+import {NBA} from '../NBA';
 
 import {
   Button
@@ -18,15 +21,16 @@ import {
   get_fixtures
 } from '../../Utils/espn-api-parser.ts';
 
-import { getNHLPlayoffTeams } from '../../Utils/nhl-api-parser.ts'
-
 import './Picks.css';
-
-getNHLPlayoffTeams();
 
 const Picks = ({username, players, picks, setPicks}) => {
   const [fixtures, setFixtures] = useState([]);
   const [league, setLeague] = useState('NFL');
+  const leagueComponentMap = {
+    'NFL': <NFL players={players} username = {username}/>,
+    'NHL': <NHL players={players} username={username}/>,
+    'NBA': <NBA players={players} username={username}/>
+  };
 
   useEffect(() => {
    get_fixtures(setFixtures);
@@ -94,29 +98,8 @@ const Picks = ({username, players, picks, setPicks}) => {
         </Select>
       </FormControl>
 
-      <div className = 'matches-container'>
-        {
-          fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players} username = {username}/>)
-        }
-      </div>
 
-      <div className = 'button-container'>
-        <Button
-          className = 'select-picks-button'
-          variant = 'contained'
-          onClick = {cancel_picks}
-        >
-          Cancel Changes
-        </Button>
-
-        <Button
-          className = 'select-picks-button'
-          variant = 'contained'
-          onClick = {submit_picks}
-        >
-          Submit Picks
-        </Button>
-      </div>
+    {leagueComponentMap[league]}
     </div>
   );
 };

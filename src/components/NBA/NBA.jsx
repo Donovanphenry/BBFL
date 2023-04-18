@@ -7,9 +7,9 @@ import {
   Typography,
 } from '@mui/material';
 
-import './Matchup.css';
+import './NBA.css';
 
-const Matchup = ({players, username, match, match_index, fixtures, setFixtures}) => {
+const NBA = ({players, username, match, match_index, fixtures, setFixtures}) => {
 
   const changeWinner = (team_selections) => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
@@ -108,4 +108,4 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
   )
 };
 
-export default Matchup;
+export default NBA;
