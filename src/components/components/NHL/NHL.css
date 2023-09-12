@@ -1,0 +1,45 @@
+.fixture-container
+{
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.team-div:hover
+{
+  cursor: pointer;
+}
+
+.winning-team
+{
+  color: green;
+}
+
+.losing-team
+{
+  color: red;
+}
+
+.team-div:first-child
+{
+  border-right: 1px dotted gray;
+}
+
+.team-div
+{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-picture
+{
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+.kickoff-time
+{
+  font-style: italic;
+}

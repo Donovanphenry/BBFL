@@ -1,0 +1,8 @@
+.pages-container
+{
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  gap: 10px;
+  color: #3f51b5;
+}
