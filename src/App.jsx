@@ -12,7 +12,7 @@ import {
     Rules
 } from './components';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
 const App = () => {
@@ -43,10 +43,9 @@ const App = () => {
         />
 
         <Routes>
-          <Route index element = {<Home />} />
+          <Route index element = {<Picks players = {players} username = {username}/>} />
           <Route path = 'league-score' element = {<LeagueScore />} />
-          <Route path = 'picks' element = {<Picks players = {players} username = {username}/>} />
-            <Route path = 'rules' element = {<Rules/>}/>
+          <Route path = 'rules' element = {<Rules/>}/>
         </Routes>
       </Router>
     </div>

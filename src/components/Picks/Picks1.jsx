@@ -28,8 +28,8 @@ const Picks = ({username, players, picks, setPicks}) => {
   const [league, setLeague] = useState('NFL');
   const leagueComponentMap = {
     'NFL': <NFL players={players} username = {username}/>,
-    'NHL': <NHL players={players} username={username}/>,
-    'NBA': <NBA players={players} username={username}/>
+    //'NHL': <NHL players={players} username={username}/>,
+    //'NBA': <NBA players={players} username={username}/>
   };
 
   useEffect(() => {
@@ -81,20 +81,20 @@ const Picks = ({username, players, picks, setPicks}) => {
   return fixtures && (
     <div className = 'container'>
       <FormControl className = 'league-select' variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel sx={{color: 'inherit'}}>League</InputLabel>
+        <InputLabel sx={{color: '#4169E1'}}>League</InputLabel>
         <Select
           value={league}
           onChange={(e) => setLeague(e.target.value)}
           label="League"
           className='league-holster'
-          sx={{color: 'inherit'}}
+          sx = {{color: '#4169E1'}}
         >
           <MenuItem value="" className='league-option'>
             <em>None</em>
           </MenuItem>
-          <MenuItem value={'NBA'} className='league-option'>NBA</MenuItem>
+      {/*<MenuItem value={'NBA'} className='league-option'>NBA</MenuItem>*/}
           <MenuItem value={'NFL'} className='league-option'>NFL</MenuItem>
-          <MenuItem value={'NHL'} className='league-option'>NHL</MenuItem>
+      {/*<MenuItem value={'NHL'} className='league-option'>NHL</MenuItem>*/}
         </Select>
       </FormControl>
 
