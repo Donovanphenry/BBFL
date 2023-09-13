@@ -13,6 +13,13 @@
   grid-gap: 20px;
 }
 
+@media screen and (max-width: 890px) {
+  .matches-container
+  {
+    grid-template-columns: 1fr;
+  }
+}
+
 .button-container
 {
   display: flex;
