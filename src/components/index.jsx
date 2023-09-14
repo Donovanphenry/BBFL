@@ -1,7 +1,10 @@
+export { AuthModal } from './AuthModal';
+export { ConfirmModal } from './ConfirmModal';
 export { NavBar } from './NavBar';
-export { Home } from './Home';
 export { LeagueScore } from './LeagueScore';
+export { LoginModal } from './LoginModal';
 export { Picks } from './Picks';
 export { TabDrawer } from './TabDrawer';
-export { Login } from './Login';
+export { SettingsModal } from './SettingsModal';
+export { RegisterModal } from './RegisterModal';
 export { Rules } from './Rules';

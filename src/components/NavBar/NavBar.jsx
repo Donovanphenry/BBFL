@@ -8,6 +8,7 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import {
   useNavigate
@@ -20,7 +21,7 @@ const NavBar = (props) => {
   const {
     tabDrawerOpen,
     setShowTabDrawer,
-    setLoginOpen,
+    setSettingsOpen,
     username
   } = props;
 
@@ -45,9 +46,16 @@ const NavBar = (props) => {
             </Typography>
           </div>
 
-          <Button color = 'inherit' onClick = {() => setLoginOpen(true)}>
-            {username ? username : 'Login'}
-          </Button>
+          <IconButton
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='menu'
+            sx={{mr: 2}}
+            onClick={() => setSettingsOpen(true)}
+          >
+            <SettingsIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
 		</Box>
