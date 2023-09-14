@@ -1,12 +1,15 @@
 import {
   MouseEvent
 } from "react";
+import { useNavigate } from 'react-router-dom';
 import './ConfirmModal.css';
 
 export default function ConfirmModal(props) {
+  const navigate = useNavigate();
   const { modal_state, setModalState } = props;
   function closeModal(e) {
     if (e.target === e.currentTarget) {
+      navigate.push('/');
       setModalState(modal_state.Hidden);
     }
   }
