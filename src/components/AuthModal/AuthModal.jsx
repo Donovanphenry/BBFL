@@ -4,7 +4,7 @@ import { LoginModal } from '../LoginModal';
 import { RegisterModal } from '../RegisterModal';
 
 export default function AuthModal(props) {
-  const { modal_state, supabase } = props;
+  const { modal_state, setUserId, supabase } = props;
   const [modalState, setModalState] = useState(modal_state.Login);
 
   return (
@@ -16,11 +16,13 @@ export default function AuthModal(props) {
       {modalState === modal_state.Login && <LoginModal
         modal_state={modal_state}
         setModalState={setModalState}
+        setUserId={setUserId}
         supabase={supabase}
       />}
       {modalState === modal_state.Register && <RegisterModal
         modal_state={modal_state}
         setModalState={setModalState}
+        setUserId={setUserId}
         supabase={supabase}
       />}
     </>

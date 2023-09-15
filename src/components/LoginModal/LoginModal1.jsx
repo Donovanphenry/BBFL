@@ -9,7 +9,7 @@ import {
 } from './utils';
 
 export default function LoginModal(props) {
-  const { modal_state, setModalState, supabase } = props;
+  const { modal_state, setModalState, setUserId, supabase } = props;
 
   /*COMPONENT STATE*/
   const [formDetails, setFormDetails] = useState({
@@ -30,24 +30,14 @@ export default function LoginModal(props) {
   /*COMPONENT FUNCTIONS*/
 
   const handleLogin = useCallback(async () => {
-    console.log("Before login");
-    let errors = await requestLogin(formDetails, supabase);
-    console.log("After login");
+    let [data, errors] = await requestLogin(formDetails, supabase);
     if (errors) {
       setFormErrors(prev => ({ ...prev, ...errors }));
       return;
     }
     setModalState(modal_state.Hidden);
+    setUserId(data.user.id);
   }, [formDetails, supabase, setModalState]);
-
-  const closeModal = useCallback(
-    (e) => {
-      if (e.target === e.currentTarget) {
-        setModalState(modal_state.Hidden);
-      }
-    },
-    [setModalState],
-  );
 
   const handleKeyPressed = useCallback(
     (e) => {
@@ -62,7 +52,7 @@ export default function LoginModal(props) {
 
   /*COMPONENT JSX*/
   return (
-    <div className='modalBackdrop' onClick={closeModal}>
+    <div className='modalBackdrop'>
       <div className='content'>
         <h1 className = 'login-header'>Login</h1>
         <div className='inputSection'>
@@ -93,7 +83,7 @@ export default function LoginModal(props) {
           {formErrors.password && <p className='error'>{formErrors.password}</p>}
         </div>
         <div className='buttonWrapper'>
-          <button onClick={closeModal}>Cancel</button>
+          <button>Cancel</button>
           <button className='actionButton' onClick={handleLogin}>
             Sign in
           </button>

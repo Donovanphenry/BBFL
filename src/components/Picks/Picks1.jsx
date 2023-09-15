@@ -23,18 +23,17 @@ import {
 
 import './Picks.css';
 
-const Picks = ({username, players, picks, setPicks}) => {
+const Picks = ({players, picks, setPicks, supabase, userId, weekId}) => {
   const [fixtures, setFixtures] = useState([]);
   const [league, setLeague] = useState('NFL');
   const leagueComponentMap = {
-    'NFL': <NFL players={players} username = {username}/>,
+    'NFL': <NFL players={players} supabase={supabase} userId={userId} weekId={weekId}/>,
     //'NHL': <NHL players={players} username={username}/>,
     //'NBA': <NBA players={players} username={username}/>
   };
 
   useEffect(() => {
    get_fixtures(setFixtures);
-
   }, []);
 
   const cancel_picks = () => {
@@ -49,34 +48,6 @@ const Picks = ({username, players, picks, setPicks}) => {
 
     setFixtures(fixtures_copy);
   };
-
-  const submit_picks = () => {
-    // Make endpoint call
-    const winners = new Set();
-    const losers = new Set();
-
-    for (const fixture_idx in fixtures)
-    {
-      const fixture = fixtures[fixture_idx];
-      for (const team in fixture.competitors)
-      {
-        const team_name = fixture.competitors[team].name;
-        if (fixture.competitors[team].pick === 'win')
-          winners.add(team_name);
-        if (fixture.competitors[team].pick === 'lose')
-          losers.add(team_name);
-      }
-    }
-
-    const picks = {
-      winners: winners,
-      losers: losers
-    };
-    players[username].picks = picks;
-
-    const players_json = JSON.stringify(players);
-    localStorage.setItem('players', players_json);
-  }
 
   return fixtures && (
     <div className = 'container'>

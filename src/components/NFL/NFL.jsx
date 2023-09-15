@@ -15,12 +15,15 @@ const NFL = (props) => {
 
   const {
     players,
-    username
+    supabase,
+    userId,
+    weekId,
   } = props;
+
+  const user = supabase.auth.getUser();
 
   useEffect(() => {
    get_fixtures(setFixtures);
-
   }, []);
 
   const cancel_picks = () => {
@@ -36,10 +39,10 @@ const NFL = (props) => {
     setFixtures(fixtures_copy);
   };
 
-  const submit_picks = () => {
+  const submit_picks = async () => {
     // Make endpoint call
-    const winners = new Set();
-    const losers = new Set();
+    const submission_time = new Date();
+    const picks = [];
 
     for (const fixture_idx in fixtures)
     {
@@ -48,21 +51,32 @@ const NFL = (props) => {
       {
         const team_name = fixture.competitors[team].name;
         if (fixture.competitors[team].pick === 'win')
-          winners.add(team_name);
-        if (fixture.competitors[team].pick === 'lose')
-          losers.add(team_name);
+        {
+          const pick = {
+            game_id: Number(fixture_idx),
+            selected_team: team,
+            timestamp: submission_time,
+            user_id: "14608862-430e-4be1-8b15-bf148e0a769a",
+            week_id: weekId,
+          }
+
+          picks.push(pick);
+        }
       }
     }
 
-    const picks = {
-      winners: winners,
-      losers: losers
-    };
-    players[username].picks = picks;
+    console.log('picks = ', picks);
 
-    const players_json = JSON.stringify(players);
-    localStorage.setItem('players', players_json);
+    const { error } = await supabase
+      .from('picks')
+      .upsert(picks, {
+        onConflict: ['user_id', 'week_id', 'game_id'],
+        action: 'update'
+      })
+      .select();
   }
+
+  const username = 'foobar';
 
   return fixtures &&
     <div className = 'container'>

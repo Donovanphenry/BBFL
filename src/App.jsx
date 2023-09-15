@@ -14,11 +14,13 @@ import {
   SettingsModal,
 } from './components';
 
+import { get_current_week } from '/src/Utils/espn-api-parser';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { createClient } from "@supabase/supabase-js";
+
 
 const api_key = import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY;
 const api_url = import.meta.env.VITE_REACT_APP_SUPABASE_API_URL;
@@ -37,6 +39,8 @@ const App = () => {
   const [session, setSession] = useState(null);
   const [modalState, setModalState] = useState(null);
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [userId, setUserId] = useState(null);
+  const [weekId, setWeekId] = useState(null);
   const persisted_players = localStorage.getItem('players');
   const players = persisted_players ? JSON.parse(persisted_players) : players_data;
 
@@ -52,18 +56,22 @@ const App = () => {
     })
 
     getUsers();
+    getWeekId();
 
     return () => subscription.unsubscribe();
   }, [])
 
+  const getWeekId = async () => {
+    const week_id = await get_current_week();
+    setWeekId(week_id);
+  }
+
   async function getUsers() {
     const { data } = await supabase.from("users").select();
-    console.log("users = ", data);
   }
 
   if (!session) {
-
-    return (<AuthModal supabase={supabase} modal_state = {modal_state}/>)
+    return (<AuthModal supabase={supabase} modal_state = {modal_state} setUserId={setUserId}/>)
   }
 
   return (
@@ -88,9 +96,9 @@ const App = () => {
         />
 
         <Routes>
-          <Route index element = {<Picks players = {players} username = {username}/>} />
-          <Route path = 'league-score' element = {<LeagueScore />} />
-          <Route path = 'rules' element = {<Rules/>}/>
+          <Route index element={<Picks players={players} supabase={supabase} userId={userId} weekId={weekId}/>} />
+          <Route path='league-score' element={<LeagueScore />} />
+          <Route path='rules' element={<Rules/>}/>
         </Routes>
       </Router>
     </div>

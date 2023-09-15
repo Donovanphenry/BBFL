@@ -81,4 +81,12 @@ const extract_fixtures = async (evt) => {
   return fixture;
 };
 
-export { get_fixtures };
+const get_current_week = async () => {
+  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
+  const res = await fetch(url);
+  const data = await res.json();
+
+  return data.season.type.week.number;
+};
+
+export { get_current_week, get_fixtures };

@@ -31,7 +31,7 @@ export async function requestLogin(
   if (formErrors) return formErrors;
 
   // Send request to supabase
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: formDetails.email,
     password: formDetails.password,
   });
@@ -41,7 +41,7 @@ export async function requestLogin(
     // console.log(error);
 
     formErrors = { email: "Invalid email or password", password: "Invalid email or password" };
-    return formErrors;
+    return [undefined, formErrors];
   }
-  return undefined;
+  return [data, undefined];
 }
