@@ -8,39 +8,32 @@ import {
   get_fixtures
 } from '../../Utils/espn-api-parser.ts';
 
-import './NFL.css';
-
 const NFL = (props) => {
   const [fixtures, setFixtures] = useState([]);
 
   const {
     players,
     supabase,
-    userId,
     weekId,
   } = props;
 
-  const user = supabase.auth.getUser();
-
   useEffect(() => {
-   get_fixtures(setFixtures);
+    get_fixtures(setFixtures, supabase);
   }, []);
 
-  const cancel_picks = () => {
+  const cancel_picks = async () => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
-
-    for (const matchup_idx in fixtures_copy)
-    {
-      const matchup = fixtures_copy[matchup_idx];
-      for (const team in matchup.competitors)
-        matchup.competitors[team].pick = 'none';
-    }
-
-    setFixtures(fixtures_copy);
+    get_fixtures(setFixtures, supabase);
   };
 
   const submit_picks = async () => {
-    // Make endpoint call
+    const user_res = await supabase.auth.getUser();
+    if (user_res.error) {
+      console.error('Erreur lors de la récupération du user: ', error);
+      return;
+    }
+    const user_id = user_res.data.user.id;
+
     const submission_time = new Date();
     const picks = [];
 
@@ -53,11 +46,11 @@ const NFL = (props) => {
         if (fixture.competitors[team].pick === 'win')
         {
           const pick = {
-            game_id: Number(fixture_idx),
+            pick_number: Number(fixture_idx),
             selected_team: team,
-            timestamp: submission_time,
-            user_id: "14608862-430e-4be1-8b15-bf148e0a769a",
-            week_id: weekId,
+            timestamp_selected: submission_time,
+            user_id: user_id,
+            week_number: weekId,
           }
 
           picks.push(pick);
@@ -65,24 +58,29 @@ const NFL = (props) => {
       }
     }
 
-    console.log('picks = ', picks);
+    const upsert_res = await supabase
+     .from("user_picks")
+     .upsert(
+       picks,
+       {
+         onConflict: ["user_id", "week_number", "pick_number"],
+         returning: ["*"],
+       }
+     );
 
-    const { error } = await supabase
-      .from('picks')
-      .upsert(picks, {
-        onConflict: ['user_id', 'week_id', 'game_id'],
-        action: 'update'
-      })
-      .select();
+    if (upsert_res.error) {
+      alert("Error while upserting: ", upsert_res.error);
+    }
+    else {
+      alert("Picks made.");
+    }
   }
-
-  const username = 'foobar';
 
   return fixtures &&
     <div className = 'container'>
       <div className = 'matches-container'>
         {
-          fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players} username = {username}/>)
+          fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players}/>)
         }
       </div>
 

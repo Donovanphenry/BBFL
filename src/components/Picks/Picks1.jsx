@@ -23,11 +23,11 @@ import {
 
 import './Picks.css';
 
-const Picks = ({players, picks, setPicks, supabase, userId, weekId}) => {
+const Picks = ({players, picks, setPicks, supabase, user, userId, weekId}) => {
   const [fixtures, setFixtures] = useState([]);
   const [league, setLeague] = useState('NFL');
   const leagueComponentMap = {
-    'NFL': <NFL players={players} supabase={supabase} userId={userId} weekId={weekId}/>,
+    'NFL': <NFL players={players} supabase={supabase} user={user} weekId={weekId}/>,
     //'NHL': <NHL players={players} username={username}/>,
     //'NBA': <NBA players={players} username={username}/>
   };

@@ -7,9 +7,12 @@ import {
   Typography,
 } from '@mui/material';
 
+import CelebrationIcon from '@mui/icons-material/Celebration';
+import SportsFootballIcon from '@mui/icons-material/SportsFootball';
+
 import './Matchup.css';
 
-const Matchup = ({players, username, match, match_index, fixtures, setFixtures}) => {
+const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
   const changeWinner = (team_selections) => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
@@ -20,6 +23,7 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
 
     for (const {team, pick} of team_selections)
     {
+      console.log('pick = ', pick);
       const curr_pick = fixture_copy.competitors[team]['pick'];
       if (pick === curr_pick)
         fixture_copy.competitors[team]['pick'] = 'none';
@@ -90,6 +94,28 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
           <Typography className = {get_team_class(match.competitors.home)}>
             {match.competitors.home.name} ({match.competitors.home.record})
           </Typography>
+
+          <Typography className = {`match-score ${get_team_class(match.competitors.home)}`}>
+            <span className={match.competitors.home.winner ? 'match-winners-icon' : 'match-losers-icon'}>
+              <CelebrationIcon/>
+            </span>
+
+            <span className={match.competitors.home.possessor ? 'attacker-icon' : 'defender-icon'}>
+              <SportsFootballIcon/>
+            </span>
+
+            { match.competitors.home.show_score &&
+              <span className={match.competitors.home.winner ? 'match-winners-text' : 'match-losers-text'}>
+                {match.competitors.home.score}
+              </span>
+            }
+          </Typography>
+
+          { match.competitors.home.possessor &&
+            <Typography>
+              {match.competitors.home.possessor_text}
+            </Typography>
+          }
         </div>
 
         <div className = 'team-div' onClick = {() => changeWinner([{'team': 'home', 'pick': 'lose'}, {'team': 'away', 'pick': 'win'}])}>
@@ -98,6 +124,28 @@ const Matchup = ({players, username, match, match_index, fixtures, setFixtures})
           <Typography className = {get_team_class(match.competitors.away)}>
             {match.competitors.away.name} ({match.competitors.away.record})
           </Typography>
+
+          <Typography className = {`match-score ${get_team_class(match.competitors.away)}`}>
+            <span className={match.competitors.away.winner ? 'match-winners-icon' : 'match-losers-icon'}>
+              <CelebrationIcon sx={{fontSize: '20px'}}/>
+            </span>
+
+            <span className={match.competitors.away.possessor ? 'attacker-icon' : 'defender-icon'}>
+              <SportsFootballIcon sx={{fontSize: '20px'}}/>
+            </span>
+
+            { match.competitors.away.show_score &&
+              <span className={match.competitors.away.winner ? 'match-winners-text' : 'match-losers-text'}>
+                {match.competitors.away.score}
+              </span>
+            }
+          </Typography>
+
+          { match.competitors.away.possessor &&
+            <Typography>
+              {match.competitors.away.possessor_text}
+            </Typography>
+          }
         </div>
       </div>
 

@@ -47,3 +47,43 @@
 {
   font-style: italic;
 }
+
+.match-winners-icon
+{
+  flex: 1;
+  text-align: right;
+  color: #E3B778;
+}
+
+.match-winners-text
+{
+  flex: 1;
+  text-align: left;
+}
+
+.match-losers-icon
+{
+  display: none;
+}
+
+.match-losers-text
+{
+}
+
+.match-score
+{
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.attacker-icon
+{
+  color: #6E260E;
+}
+
+.defender-icon
+{
+  display: none;
+}

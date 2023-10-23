@@ -43,6 +43,7 @@ const App = () => {
   const [weekId, setWeekId] = useState(null);
   const persisted_players = localStorage.getItem('players');
   const players = persisted_players ? JSON.parse(persisted_players) : players_data;
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -55,7 +56,9 @@ const App = () => {
       setSession(session)
     })
 
-    getUsers();
+    const ref_user = getUser();
+    setUser(ref_user);
+
     getWeekId();
 
     return () => subscription.unsubscribe();
@@ -66,8 +69,14 @@ const App = () => {
     setWeekId(week_id);
   }
 
-  async function getUsers() {
-    const { data } = await supabase.from("users").select();
+  async function getUser() {
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error('Failure getting user: ', error);
+    }
+
+    return data.user;
   }
 
   if (!session) {
@@ -96,7 +105,7 @@ const App = () => {
         />
 
         <Routes>
-          <Route index element={<Picks players={players} supabase={supabase} userId={userId} weekId={weekId}/>} />
+          <Route index element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId}/>} />
           <Route path='league-score' element={<LeagueScore />} />
           <Route path='rules' element={<Rules/>}/>
         </Routes>

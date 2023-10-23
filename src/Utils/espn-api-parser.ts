@@ -1,13 +1,45 @@
-const get_fixtures = async (setFixtures) => {
+const get_fixtures = async (setFixtures, supabase) => {
+  if (!supabase) {
+    return []
+  }
+  const user_res = await supabase.auth.getUser();
+  if (user_res.error) {
+    console.error('failure getting user: ', error);
+    return;
+  }
+
+
+
+  const curr_day_of_week = (new Date()).toLocaleString("en-US", {
+    timezone: "America/Los_Angeles",
+    weekday: 'long',
+  });
+
+  // Create a new Date object to represent the current date and time
+  const currentDate = new Date();
+
+  // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
+  const pdtDate = new Date(currentDate.getTime() - 7 * 60 * 60 * 1000); // Subtract 7 hours
+
+  // Get the day of the week as an integer (0 for Sunday, 1 for Monday, and so on)
+  const pdtDayOfWeek = pdtDate.getDay();
+
   const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
   const res = await fetch(url);
   const data = await res.json();
+
+  const year_of_season = data.season.year;
 
   const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
-  const events_url = week_data.events['$ref'].replace(/^http:/, 'https:');
+  let week_num = week_data.number;
+  if (pdtDayOfWeek == 2 || pdtDayOfWeek == 3) {
+    week_num += 1;
+  }
+
+  const events_url = `${url}/seasons/${year_of_season}/types/2/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
   const events_res = await fetch(events_url);
   const events_data = await events_res.json();
   const events = events_data.items;
@@ -24,6 +56,42 @@ const get_fixtures = async (setFixtures) => {
     return 1;
   });
 
+  const user_id = user_res.data.user.id;
+  let user_picks = []
+  if (user_id) {
+    const { data, error } = await supabase
+      .from("user_picks")
+      .select("*")
+      .eq("user_id", user_id)
+      .eq("week_number", week_num);
+
+    if (error) {
+      console.error("Erreur lors de la récupération des données :", error);
+    } else {
+      console.log("Données récupérées avec succès :", data);
+    }
+    user_picks = data;
+  }
+
+  fixtures.map((fixture, idx) => {
+    const pick = user_picks.find((pick) => {
+      return pick.pick_number === idx
+    });
+
+    if (pick) {
+      if (pick.selected_team === 'home')
+      {
+        fixture.competitors.home.pick = 'win';
+        fixture.competitors.away.pick = 'lose';
+      }
+      else
+      {
+        fixture.competitors.away.pick = 'win';
+        fixture.competitors.home.pick = 'lose';
+      }
+    }
+  });
+
   setFixtures(fixtures);
 };
 
@@ -36,7 +104,30 @@ const extract_fixtures = async (evt) => {
   const comp_res = await fetch(comp_url);
   const comp_data = await comp_res.json();
 
+  const situation_url = comp_data.situation['$ref'].replace(/^http:/, 'https:');
+  const situation_res = await fetch(situation_url);
+  const situation_data = await situation_res.json();
+
+  const status_url = comp_data.status['$ref'].replace(/^http:/, 'https:');
+  const status_res = await fetch(status_url);
+  const status_data = await status_res.json();
+
+  const is_playing = status_data.type.completed;
+
+  let possessing_team_name = null;
+  let possessor_text = null;
+  if (situation_data.team)
+  {
+    const possessing_team_url = situation_data.team['$ref'];
+    const possessing_team_res = await fetch(possessing_team_url);
+    const possessing_team_data = await possessing_team_res.json();
+
+    possessing_team_name = possessing_team_data.name;
+    possessor_text = situation_data.downDistanceText;
+  }
+
   const [c1, c2] = comp_data['competitors'];
+
   const competitors = {
     home: {
       obj: c1
@@ -51,6 +142,13 @@ const extract_fixtures = async (evt) => {
   for (const competitor_type in competitors)
   {
     const competitor = competitors[competitor_type];
+
+    const competitor_score_url = competitor.obj.score['$ref'].replace(/^http:/, 'https:');
+    const competitor_score_res = await fetch(competitor_score_url);
+    const competitor_score_data = await competitor_score_res.json();
+
+    const competitor_score = competitor_score_data.value;
+    const competitor_winner = competitor_score_data.winner;
 
     const competitor_url = competitor.obj.team['$ref'].replace(/^http:/, 'https:');
     const competitor_res = await fetch(competitor_url);
@@ -69,6 +167,26 @@ const extract_fixtures = async (evt) => {
 
     competitor['record'] = record_data.items[0].summary;
     competitor['pick'] = 'none';
+    competitor['score'] = competitor_score;
+    competitor['winner'] = competitor_winner;
+    competitor['possessor'] = false;
+    competitor['possessor_text'] = null;
+    competitor['show_score'] = status_data.type.state == "pre" ? false : true;
+
+    if (competitor.name == "San Francisco 49ers")
+    {
+      console.log('status_data = ', status_data);
+    }
+    if (competitor.name == "Cleveland Browns")
+    {
+      console.log('status_data = ', status_data);
+    }
+
+    if (possessing_team_name === team_data.name)
+    {
+      competitor['possessor'] = true;
+      competitor['possessor_text'] = possessor_text;
+    }
 
     delete competitor['obj'];
   }
