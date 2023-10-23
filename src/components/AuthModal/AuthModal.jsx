@@ -4,8 +4,7 @@ import { LoginModal } from '../LoginModal';
 import { RegisterModal } from '../RegisterModal';
 
 export default function AuthModal(props) {
-  const { modal_state, setUserId, supabase } = props;
-  const [modalState, setModalState] = useState(modal_state.Login);
+  const { modal_state, setUserId, supabase, modalState, setModalState } = props;
 
   return (
     <>

@@ -64,6 +64,7 @@ export default function LoginModal(props) {
             value={formDetails.email}
             onChange={handleChange}
             onKeyDown={handleKeyPressed}
+            className='login-input'
           />
           {formErrors.email && <p className='error'>{formErrors.email}</p>}
         </div>
@@ -79,11 +80,12 @@ export default function LoginModal(props) {
             value={formDetails.password}
             onChange={handleChange}
             onKeyDown={handleKeyPressed}
+            className='login-input'
           />
           {formErrors.password && <p className='error'>{formErrors.password}</p>}
         </div>
         <div className='buttonWrapper'>
-          <button>Cancel</button>
+          <button className='login-button'>Cancel</button>
           <button className='actionButton' onClick={handleLogin}>
             Sign in
           </button>
@@ -93,7 +95,7 @@ export default function LoginModal(props) {
           onClick={() => {
             setModalState(modal_state.Register);
           }}
-          className='switchActions'
+          className='login-button'
         >
           {"Don't have an account?"}
         </button>

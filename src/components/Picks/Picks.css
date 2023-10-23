@@ -4,6 +4,7 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  background-color: #353839;
 }
 
 .matches-container

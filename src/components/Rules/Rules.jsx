@@ -24,7 +24,7 @@ const Rules = () => {
                     </li>
                     <li>
                         Saturday, Sunday and Monday picks must be submitted before
-                        earliest game of those three days 
+                        earliest game of those three days
                     </li>
                     <li>
                         If picks fail to be submitted on time, those picks

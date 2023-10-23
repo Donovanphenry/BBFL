@@ -37,7 +37,7 @@ const App = () => {
   const [showTabDrawer, setShowTabDrawer] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [session, setSession] = useState(null);
-  const [modalState, setModalState] = useState(null);
+  const [modalState, setModalState] = useState(modal_state.Login);
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
   const [userId, setUserId] = useState(null);
   const [weekId, setWeekId] = useState(null);
@@ -80,7 +80,7 @@ const App = () => {
   }
 
   if (!session) {
-    return (<AuthModal supabase={supabase} modal_state = {modal_state} setUserId={setUserId}/>)
+    return (<AuthModal supabase={supabase} modal_state = {modal_state} setModalState={setModalState} modalState={modalState} setUserId={setUserId}/>)
   }
 
   return (

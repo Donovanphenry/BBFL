@@ -4,6 +4,7 @@ export { NavBar } from './NavBar';
 export { LeagueScore } from './LeagueScore';
 export { LoginModal } from './LoginModal';
 export { Picks } from './Picks';
+export { ProtectedRoute } from './ProtectedRoute';
 export { TabDrawer } from './TabDrawer';
 export { SettingsModal } from './SettingsModal';
 export { RegisterModal } from './RegisterModal';

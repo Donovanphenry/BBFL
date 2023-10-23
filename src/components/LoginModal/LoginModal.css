@@ -19,7 +19,7 @@
   max-width: 600px;
   padding: 2rem;
   border-radius: 8px;
-  background-color: #ffff;
+  background-color: #FDF5E6;
 
   input {
     display: block;
@@ -52,12 +52,13 @@
   }
 }
 
-.login-header, .login-param {
-  color: black;
+.login-header {
+  color: #353839;
 }
 
 .login-param {
   text-align: left;
+  color: #353839;
 }
 
 .inputSection {
@@ -99,6 +100,16 @@
   }
 }
 
-.switchActions {
-  text-decoration: none;
+.login-input
+{
+  background-color: #353839;
+  color: #FDF5E6;
+  border: 0px;
 }
+
+.login-button
+{
+  background-color: #353839;
+  color: #FDF5E6;
+}
+

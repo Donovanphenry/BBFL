@@ -8,8 +8,6 @@ const get_fixtures = async (setFixtures, supabase) => {
     return;
   }
 
-
-
   const curr_day_of_week = (new Date()).toLocaleString("en-US", {
     timezone: "America/Los_Angeles",
     weekday: 'long',
@@ -172,15 +170,6 @@ const extract_fixtures = async (evt) => {
     competitor['possessor'] = false;
     competitor['possessor_text'] = null;
     competitor['show_score'] = status_data.type.state == "pre" ? false : true;
-
-    if (competitor.name == "San Francisco 49ers")
-    {
-      console.log('status_data = ', status_data);
-    }
-    if (competitor.name == "Cleveland Browns")
-    {
-      console.log('status_data = ', status_data);
-    }
 
     if (possessing_team_name === team_data.name)
     {

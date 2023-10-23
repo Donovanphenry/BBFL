@@ -23,7 +23,6 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
     for (const {team, pick} of team_selections)
     {
-      console.log('pick = ', pick);
       const curr_pick = fixture_copy.competitors[team]['pick'];
       if (pick === curr_pick)
         fixture_copy.competitors[team]['pick'] = 'none';
@@ -56,31 +55,29 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
   const is_late_pick = (kickoff_time) => {
     const kickoff_date = new Date(kickoff_time);
-    const kickoff_day = kickoff_date.getDay();
+    const timeZone = 'America/Los_Angeles';
+    const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(kickoff_date);
     const curr_date = new Date();
+    const curr_date_la = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(curr_date);
 
-    if (kickoff_day === 4 && curr_date < kickoff_date)
+    if (kickoff_day === 'Thursday' && curr_date_la < kickoff_date)
       return false;
-    if (kickoff_day === 4)
-      return true;
-    if (kickoff_day === 1 && curr_date < kickoff_date)
-      return false
-    if (kickoff_day === 1)
+    if (kickoff_day === 'Thursday')
       return true;
 
-    let earliest_sunday_fixture_date = null;
+    let earliest_sunday_fixture_date = new Date();
     for (const fixture of fixtures)
     {
       const fixture_date = new Date(fixture.kickoff_time);
 
-      if (fixture_date.getDay() === 0)
+      if (fixture_date.getDay() === 0 && fixture_date < earliest_sunday_fixture_date)
       {
         earliest_sunday_fixture_date = fixture_date;
-        break;
       }
     }
 
-    if (curr_date < earliest_sunday_fixture_date)
+
+    if (curr_date_la < earliest_sunday_fixture_date)
       return false;
     return true;
   };

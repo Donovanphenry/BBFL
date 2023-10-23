@@ -30,7 +30,6 @@ export default function RegisterModal(props) {
   /*COMPONENT FUNCTIONS*/
 
   const handleRegister = useCallback(async () => {
-    console.log("in handleRegister: requestRegister = ", requestRegister);
     let formErrors = await requestRegister(formDetails, supabase);
     if (formErrors) {
       setFormErrors(prev => ({ ...prev, ...formErrors }));
@@ -42,7 +41,7 @@ export default function RegisterModal(props) {
   const closeModal = useCallback(
     (e) => {
       if (e.target === e.currentTarget) {
-        setModalState(modal_state.Hidden);
+        setModalState(modal_state.Login);
       }
     },
     [setModalState],

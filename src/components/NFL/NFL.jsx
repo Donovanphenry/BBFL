@@ -68,12 +68,7 @@ const NFL = (props) => {
        }
      );
 
-    if (upsert_res.error) {
-      alert("Error while upserting: ", upsert_res.error);
-    }
-    else {
-      alert("Picks made.");
-    }
+    window.location.reload();
   }
 
   return fixtures &&

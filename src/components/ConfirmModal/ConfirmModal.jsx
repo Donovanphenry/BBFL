@@ -9,8 +9,8 @@ export default function ConfirmModal(props) {
   const { modal_state, setModalState } = props;
   function closeModal(e) {
     if (e.target === e.currentTarget) {
-      navigate.push('/');
       setModalState(modal_state.Hidden);
+      navigate.push('/');
     }
   }
 
