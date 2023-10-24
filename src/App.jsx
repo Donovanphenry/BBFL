@@ -14,7 +14,7 @@ import {
   SettingsModal,
 } from './components';
 
-import { get_current_week } from '/src/Utils/espn-api-parser';
+import { get_week_num } from '/src/Utils/espn-api-parser';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
@@ -65,7 +65,7 @@ const App = () => {
   }, [])
 
   const getWeekId = async () => {
-    const week_id = await get_current_week();
+    const week_id = await get_week_num();
     setWeekId(week_id);
   }
 

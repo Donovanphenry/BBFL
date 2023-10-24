@@ -87,3 +87,40 @@
 {
   display: none;
 }
+
+.foo
+{
+  align-items: center;
+}
+
+.possessor-container
+{
+  display: flex;
+}
+
+.game-state-container
+{
+}
+
+.game-state {
+  position: relative;
+  display: inline-block;
+}
+
+.in-progress-bar
+{
+  height: 3px;
+  width: 15px;
+  background-color: green;
+  position: relative;
+  animation: moveBackAndForth 3s linear infinite;
+}
+
+@keyframes moveBackAndForth {
+  0%, 100% {
+    left: calc(var(--game-state-text-offset) - 5px);
+  }
+  50% {
+    left: calc(100% - var(--game-state-text-offset) - 5px);
+  }
+}

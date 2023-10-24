@@ -1,3 +1,32 @@
+const get_week_num = async () => {
+  const curr_day_of_week = (new Date()).toLocaleString("en-US", {
+    timezone: "America/Los_Angeles",
+    weekday: 'long',
+  });
+
+  // Create a new Date object to represent the current date and time
+  const currentDate = new Date();
+
+  // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
+  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const year_of_season = data.season.year;
+
+  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  const week_res = await fetch(week_url);
+  const week_data = await week_res.json();
+
+  let week_num = week_data.number;
+  if (curr_day_of_week == "Tuesday" || curr_day_of_week == "Wednesday")
+  {
+    week_num += 1;
+  }
+
+  return week_num;
+}
+
 const get_fixtures = async (setFixtures, supabase) => {
   if (!supabase) {
     return []
@@ -17,11 +46,6 @@ const get_fixtures = async (setFixtures, supabase) => {
   const currentDate = new Date();
 
   // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
-  const pdtDate = new Date(currentDate.getTime() - 7 * 60 * 60 * 1000); // Subtract 7 hours
-
-  // Get the day of the week as an integer (0 for Sunday, 1 for Monday, and so on)
-  const pdtDayOfWeek = pdtDate.getDay();
-
   const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
   const res = await fetch(url);
   const data = await res.json();
@@ -33,7 +57,8 @@ const get_fixtures = async (setFixtures, supabase) => {
   const week_data = await week_res.json();
 
   let week_num = week_data.number;
-  if (pdtDayOfWeek == 2 || pdtDayOfWeek == 3) {
+  if (curr_day_of_week == "Tuesday" || curr_day_of_week == "Wednesday")
+  {
     week_num += 1;
   }
 
@@ -110,6 +135,8 @@ const extract_fixtures = async (evt) => {
   const status_res = await fetch(status_url);
   const status_data = await status_res.json();
 
+  const game_time = `Q${status_data.period} - ${status_data.displayClock}`;
+
   const is_playing = status_data.type.completed;
 
   let possessing_team_name = null;
@@ -132,7 +159,7 @@ const extract_fixtures = async (evt) => {
     },
     away: {
       obj: c2
-    }
+    },
   };
   if (c1.homeAway !== 'home')
     [competitors.home.obj, competitors.away.obj] = [c2, c1];
@@ -165,7 +192,7 @@ const extract_fixtures = async (evt) => {
 
     competitor['record'] = record_data.items[0].summary;
     competitor['pick'] = 'none';
-    competitor['score'] = competitor_score;
+    competitor['score'] = `${competitor_score} pts`;
     competitor['winner'] = competitor_winner;
     competitor['possessor'] = false;
     competitor['possessor_text'] = null;
@@ -182,7 +209,9 @@ const extract_fixtures = async (evt) => {
 
   const fixture = {
     competitors: competitors,
-    kickoff_time: match_data.date
+    kickoff_time: match_data.date,
+    game_time: game_time,
+    is_active: status_data.type.state != "pre" && status_data.type.state != "post",
   };
 
   return fixture;
@@ -196,4 +225,4 @@ const get_current_week = async () => {
   return data.season.type.week.number;
 };
 
-export { get_current_week, get_fixtures };
+export { get_week_num, get_fixtures };
