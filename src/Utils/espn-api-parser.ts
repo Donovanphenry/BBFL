@@ -143,7 +143,7 @@ const extract_fixtures = async (evt) => {
   let possessor_text = null;
   if (situation_data.team)
   {
-    const possessing_team_url = situation_data.team['$ref'];
+    const possessing_team_url = situation_data.team['$ref'].replace(/^http:/, 'https:');
     const possessing_team_res = await fetch(possessing_team_url);
     const possessing_team_data = await possessing_team_res.json();
 
