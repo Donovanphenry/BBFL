@@ -1,5 +1,7 @@
 .match-container
 {
+  display: flex;
+  flex-direction: column;
 }
 
 .fixture-container
@@ -8,6 +10,7 @@
   display: flex;
   gap: 10px;
   justify-content: space-between;
+  flex: 1;
 }
 
 .team-div:hover
@@ -55,6 +58,11 @@
   color: #E3B778;
 }
 
+.score-text
+{
+  flex: 1;
+}
+
 .match-winners-text
 {
   flex: 1;
@@ -96,6 +104,7 @@
 .possessor-container
 {
   display: flex;
+  flex-direction: column;
 }
 
 .game-state-container

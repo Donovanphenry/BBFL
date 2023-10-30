@@ -106,7 +106,7 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
 
             { match.competitors.home.show_score &&
-              <span className={match.competitors.home.winner ? 'match-winners-text' : 'match-losers-text'}>
+              <span className={match.competitors.home.winner ? 'match-winners-text' : 'score-text'}>
                 {match.competitors.home.score}
               </span>
             }
@@ -114,13 +114,9 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
           { match.competitors.home.possessor &&
             <div className='possessor-container'>
-
               <span className='attacker-icon'>
                 <SportsFootballIcon/>
               </span>
-              <Typography className='foo'>
-                {match.competitors.home.possessor_text}
-              </Typography>
             </div>
           }
         </div>
@@ -148,13 +144,9 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
 
           { match.competitors.away.possessor &&
             <div className = 'possessor-container'>
-                <span className='attacker-icon'>
-                  <SportsFootballIcon sx={{fontSize: '20px'}}/>
-                </span>
-
-              <Typography className = 'foo'>
-                {match.competitors.away.possessor_text}
-              </Typography>
+              <span className='attacker-icon'>
+                <SportsFootballIcon sx={{fontSize: '20px'}}/>
+              </span>
             </div>
           }
         </div>
@@ -165,6 +157,13 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
           {match.game_time}
         </Typography>
       }
+
+      { match.is_active &&
+        <Typography className = 'foo'>
+          {match.possessor_text}
+        </Typography>
+      }
+
 
 
       <Typography className = 'kickoff-time' sx = {{fontSize: 14, textDecoration: is_late_pick(match.kickoff_time) ? 'line-through' : 'none'}}>

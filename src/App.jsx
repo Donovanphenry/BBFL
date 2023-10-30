@@ -12,6 +12,7 @@ import {
   Picks,
   Rules,
   SettingsModal,
+  WeekScores,
 } from './components';
 
 import { get_week_num } from '/src/Utils/espn-api-parser';
@@ -56,13 +57,17 @@ const App = () => {
       setSession(session)
     })
 
-    const ref_user = getUser();
-    setUser(ref_user);
+    const set_user = async () => {
+      const ref_user = await getUser();
+      setUser(ref_user);
+    };
+
+    set_user();
 
     getWeekId();
 
     return () => subscription.unsubscribe();
-  }, [])
+  }, []);
 
   const getWeekId = async () => {
     const week_id = await get_week_num();
@@ -77,7 +82,7 @@ const App = () => {
     }
 
     return data.user;
-  }
+  };
 
   if (!session) {
     return (<AuthModal supabase={supabase} modal_state = {modal_state} setModalState={setModalState} modalState={modalState} setUserId={setUserId}/>)
@@ -107,6 +112,7 @@ const App = () => {
         <Routes>
           <Route index element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId}/>} />
           <Route path='league-score' element={<LeagueScore />} />
+          <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId}/>} />
           <Route path='rules' element={<Rules/>}/>
         </Routes>
       </Router>

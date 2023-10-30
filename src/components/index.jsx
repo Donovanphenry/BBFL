@@ -9,3 +9,5 @@ export { TabDrawer } from './TabDrawer';
 export { SettingsModal } from './SettingsModal';
 export { RegisterModal } from './RegisterModal';
 export { Rules } from './Rules';
+export { WeekScores } from './WeekScores';
+export { WeekScoreRow } from './WeekScoreRow';

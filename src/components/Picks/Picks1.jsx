@@ -17,10 +17,6 @@ import {
   Button
 } from '@mui/material';
 
-import {
-  get_fixtures
-} from '../../Utils/espn-api-parser.ts';
-
 import './Picks.css';
 
 const Picks = ({players, picks, setPicks, supabase, user, userId, weekId}) => {
@@ -31,10 +27,6 @@ const Picks = ({players, picks, setPicks, supabase, user, userId, weekId}) => {
     //'NHL': <NHL players={players} username={username}/>,
     //'NBA': <NBA players={players} username={username}/>
   };
-
-  useEffect(() => {
-   get_fixtures(setFixtures);
-  }, []);
 
   const cancel_picks = () => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
@@ -49,7 +41,7 @@ const Picks = ({players, picks, setPicks, supabase, user, userId, weekId}) => {
     setFixtures(fixtures_copy);
   };
 
-  return fixtures && (
+  return (
     <div className = 'container'>
       <FormControl className = 'league-select' variant="standard" sx={{ m: 1, minWidth: 120 }}>
         <InputLabel sx={{color: '#4169E1'}}>League</InputLabel>

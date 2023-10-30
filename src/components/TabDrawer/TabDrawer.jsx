@@ -26,7 +26,11 @@ const TabDrawer = (props) => {
     {
       name: 'Rules',
       path: 'rules'
-    }
+    },
+    {
+      name: 'Week Scores',
+      path: 'week-scores'
+    },
   ];
   const navigate = useNavigate();
   const location = useLocation();

@@ -27,16 +27,7 @@ const get_week_num = async () => {
   return week_num;
 }
 
-const get_fixtures = async (setFixtures, supabase) => {
-  if (!supabase) {
-    return []
-  }
-  const user_res = await supabase.auth.getUser();
-  if (user_res.error) {
-    console.error('failure getting user: ', error);
-    return;
-  }
-
+const get_fixtures = async () => {
   const curr_day_of_week = (new Date()).toLocaleString("en-US", {
     timezone: "America/Los_Angeles",
     weekday: 'long',
@@ -79,7 +70,50 @@ const get_fixtures = async (setFixtures, supabase) => {
     return 1;
   });
 
-  const user_id = user_res.data.user.id;
+  return fixtures;
+};
+
+const get_user_fixtures = async (setFixtures, supabase) => {
+  const user_res = await supabase.auth.getUser();
+  if (user_res.error)
+  {
+    console.error("Ouf: ", error);
+  }
+
+  const user = user_res.data.user;
+  const curr_day_of_week = (new Date()).toLocaleString("en-US", {
+    timezone: "America/Los_Angeles",
+    weekday: 'long',
+  });
+
+  // Create a new Date object to represent the current date and time
+  const currentDate = new Date();
+
+  // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
+  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const year_of_season = data.season.year;
+
+  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  const week_res = await fetch(week_url);
+  const week_data = await week_res.json();
+
+  let week_num = week_data.number;
+  if (curr_day_of_week == "Tuesday" || curr_day_of_week == "Wednesday")
+  {
+    week_num += 1;
+  }
+
+  const events_url = `${url}/seasons/${year_of_season}/types/2/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
+  const events_res = await fetch(events_url);
+  const events_data = await events_res.json();
+  const events = events_data.items;
+
+  const fixtures = await get_fixtures();
+
+  const user_id = await user.id;
   let user_picks = []
   if (user_id) {
     const { data, error } = await supabase
@@ -195,13 +229,11 @@ const extract_fixtures = async (evt) => {
     competitor['score'] = `${competitor_score} pts`;
     competitor['winner'] = competitor_winner;
     competitor['possessor'] = false;
-    competitor['possessor_text'] = null;
     competitor['show_score'] = status_data.type.state == "pre" ? false : true;
 
     if (possessing_team_name === team_data.name)
     {
       competitor['possessor'] = true;
-      competitor['possessor_text'] = possessor_text;
     }
 
     delete competitor['obj'];
@@ -212,6 +244,7 @@ const extract_fixtures = async (evt) => {
     kickoff_time: match_data.date,
     game_time: game_time,
     is_active: status_data.type.state != "pre" && status_data.type.state != "post",
+    possessor_text: possessor_text
   };
 
   return fixture;
@@ -225,4 +258,4 @@ const get_current_week = async () => {
   return data.season.type.week.number;
 };
 
-export { get_week_num, get_fixtures };
+export { get_week_num, get_fixtures, get_user_fixtures };

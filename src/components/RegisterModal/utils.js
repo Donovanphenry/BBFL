@@ -35,13 +35,11 @@ export async function requestRegister(
   formDetails,
   supabase,
 ) {
-  console.log("In requestRegister");
   // Check if inputs are valid
   let formErrors = verifyRegisterInputs(formDetails);
   if (formErrors) return formErrors;
 
   // Send request to supabase
-  console.log("[email, password] = ", [formDetails.email, formDetails.password]);
   const { data, error } = await supabase.auth.signUp({
     email: formDetails.email,
     password: formDetails.password,

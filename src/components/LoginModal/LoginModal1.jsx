@@ -90,8 +90,7 @@ export default function LoginModal(props) {
             Sign in
           </button>
         </div>
-        {/* Option to switch between login and register */}
-        <button
+    {/*        <button
           onClick={() => {
             setModalState(modal_state.Register);
           }}
@@ -99,6 +98,7 @@ export default function LoginModal(props) {
         >
           {"Don't have an account?"}
         </button>
+*/}
       </div>
     </div>
   );

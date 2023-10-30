@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 
 import {
-  get_fixtures
+  get_user_fixtures
 } from '../../Utils/espn-api-parser.ts';
 
 const NFL = (props) => {
@@ -14,25 +14,23 @@ const NFL = (props) => {
   const {
     players,
     supabase,
+    user,
     weekId,
   } = props;
 
   useEffect(() => {
-    get_fixtures(setFixtures, supabase);
+    get_user_fixtures(setFixtures, supabase);
   }, []);
 
   const cancel_picks = async () => {
     const fixtures_copy = JSON.parse(JSON.stringify(fixtures));
-    get_fixtures(setFixtures, supabase);
+    get_user_fixtures(setFixtures, supabase);
   };
 
   const submit_picks = async () => {
-    const user_res = await supabase.auth.getUser();
-    if (user_res.error) {
-      console.error('Erreur lors de la récupération du user: ', error);
+    if (!user)
       return;
-    }
-    const user_id = user_res.data.user.id;
+    const user_id = user;
 
     const submission_time = new Date();
     const picks = [];
