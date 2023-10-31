@@ -30,7 +30,7 @@ const NFL = (props) => {
   const submit_picks = async () => {
     if (!user)
       return;
-    const user_id = user;
+    const user_id = user.id;
 
     const submission_time = new Date();
     const picks = [];
