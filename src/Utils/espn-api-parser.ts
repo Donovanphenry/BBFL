@@ -101,7 +101,7 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   const week_data = await week_res.json();
 
   let week_num = week_data.number;
-  if (curr_day_of_week == "Tuesday" || curr_day_of_week == "Wednesday")
+  if (curr_day_of_week == "Tuesday")
   {
     week_num += 1;
   }
