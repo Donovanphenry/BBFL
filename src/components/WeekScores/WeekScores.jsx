@@ -41,6 +41,7 @@ const WeekScores = (props) => {
         .eq("week_number", weekId);
 
       const curr_fixtures = await get_fixtures();
+      console.log("curr_fixtures = ", curr_fixtures);
       const user_map = {};
       for (const pick of data)
       {

@@ -161,30 +161,41 @@ const extract_fixtures = async (evt) => {
   const comp_res = await fetch(comp_url);
   const comp_data = await comp_res.json();
 
-  const situation_url = comp_data.situation['$ref'].replace(/^http:/, 'https:');
-  const situation_res = await fetch(situation_url);
-  const situation_data = await situation_res.json();
-
-  const status_url = comp_data.status['$ref'].replace(/^http:/, 'https:');
-  const status_res = await fetch(status_url);
-  const status_data = await status_res.json();
-
-  const game_time = `Q${status_data.period} - ${status_data.displayClock}`;
-
-  const is_playing = status_data.type.completed;
-
+  let situation_data = null;
+  let status_data = {
+    'type': {
+      'state': 'pre'
+    }
+  };
+  let game_time = '';
+  let is_playing = null;
   let possessing_team_name = null;
   let possessor_text = null;
-  if (situation_data.team)
+
+  if (comp_data['situation'])
   {
-    const possessing_team_url = situation_data.team['$ref'].replace(/^http:/, 'https:');
-    const possessing_team_res = await fetch(possessing_team_url);
-    const possessing_team_data = await possessing_team_res.json();
+    const situation_url = comp_data.situation['$ref'].replace(/^http:/, 'https:');
+    const situation_res = await fetch(situation_url);
+    situation_data = await situation_res.json();
 
-    possessing_team_name = possessing_team_data.name;
-    possessor_text = situation_data.downDistanceText;
+    const status_url = comp_data.status['$ref'].replace(/^http:/, 'https:');
+    const status_res = await fetch(status_url);
+    status_data = await status_res.json();
+
+    game_time = `Q${status_data.period} - ${status_data.displayClock}`;
+
+    is_playing = status_data.type.completed;
+
+    if (situation_data.team)
+    {
+      const possessing_team_url = situation_data.team['$ref'].replace(/^http:/, 'https:');
+      const possessing_team_res = await fetch(possessing_team_url);
+      const possessing_team_data = await possessing_team_res.json();
+
+      possessing_team_name = possessing_team_data.name;
+      possessor_text = situation_data.downDistanceText;
+    }
   }
-
   const [c1, c2] = comp_data['competitors'];
 
   const competitors = {
@@ -229,6 +240,8 @@ const extract_fixtures = async (evt) => {
     competitor['score'] = `${competitor_score} pts`;
     competitor['winner'] = competitor_winner;
     competitor['possessor'] = false;
+
+
     competitor['show_score'] = status_data.type.state == "pre" ? false : true;
 
     if (possessing_team_name === team_data.name)
