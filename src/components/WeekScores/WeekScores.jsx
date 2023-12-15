@@ -35,17 +35,12 @@ const WeekScores = (props) => {
 
   useEffect(() => {
     const get_all_users_picks = async () => {
-      console.log('supabase = ', supabase);
-      console.log('weekId = ', weekId);
       const { data, error } = await supabase
         .from("user_picks")
         .select("user_id, pick_number, selected_team")
         .eq("week_number", weekId);
 
-      console.log('data = ', data);
-
       const curr_fixtures = await get_fixtures();
-      console.log("curr_fixtures = ", curr_fixtures);
       const user_map = {};
       for (const pick of data)
       {
@@ -74,7 +69,6 @@ const WeekScores = (props) => {
           selected_team: pick.selected_team,
         });
       }
-      console.log('user_map = ', user_map);
 
       for (const user_id in user_map)
       {
@@ -84,8 +78,6 @@ const WeekScores = (props) => {
         user_map[user_id].num_correct_guesses = reduction;
         user_map[user_id].picks.sort((a, b) => a.pick_number - b.pick_number);
       }
-      console.log('user_map = ', user_map);
-      console.log('curr_fixtures = ', curr_fixtures);
 
       setUserResults(user_map);
       setFixtures(curr_fixtures);

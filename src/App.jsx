@@ -70,9 +70,15 @@ const App = () => {
   }, []);
 
   const getWeekId = async () => {
+    console.log('getting week id');
     const week_id = await get_week_num();
     setWeekId(week_id);
+    console.log('week_id found to be: ', week_id);
   }
+
+  useEffect(() => {
+    console.log('weekId changed to: ', weekId);
+  }, [weekId]);
 
   async function getUser() {
     const { data, error } = await supabase.auth.getUser();
