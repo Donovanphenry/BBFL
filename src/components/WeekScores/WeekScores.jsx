@@ -35,6 +35,8 @@ const WeekScores = (props) => {
 
   useEffect(() => {
     const get_all_users_picks = async () => {
+      console.log('supabase = ', supabase);
+      console.log('weekId = ', weekId);
       const { data, error } = await supabase
         .from("user_picks")
         .select("user_id, pick_number, selected_team")
