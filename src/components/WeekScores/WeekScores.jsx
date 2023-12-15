@@ -84,7 +84,7 @@ const WeekScores = (props) => {
     };
 
     get_all_users_picks();
-  }, []);
+  }, [weekId]);
 
   return Object.keys(userResults).length > 0 && (
     <TableContainer component={Paper} sx = {{background: '#353839', color: 'white'}}>
