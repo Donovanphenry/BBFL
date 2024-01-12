@@ -15,7 +15,7 @@ import {
   WeekScores,
 } from './components';
 
-import { get_week_num } from '/src/Utils/espn-api-parser';
+import { get_week_num, get_week_type } from '/src/Utils/espn-api-parser';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
@@ -42,6 +42,7 @@ const App = () => {
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
   const [userId, setUserId] = useState(null);
   const [weekId, setWeekId] = useState(null);
+  const [weekType, setWeekType] = useState(null);
   const persisted_players = localStorage.getItem('players');
   const players = persisted_players ? JSON.parse(persisted_players) : players_data;
   const [user, setUser] = useState(null);
@@ -64,21 +65,17 @@ const App = () => {
 
     set_user();
 
-    getWeekId();
+    setWeekInfo();
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const getWeekId = async () => {
-    console.log('getting week id');
+  const setWeekInfo = async () => {
     const week_id = await get_week_num();
+    const week_type = await get_week_type();
     setWeekId(week_id);
-    console.log('week_id found to be: ', week_id);
+    setWeekType(week_type);
   }
-
-  useEffect(() => {
-    console.log('weekId changed to: ', weekId);
-  }, [weekId]);
 
   async function getUser() {
     const { data, error } = await supabase.auth.getUser();
@@ -116,9 +113,9 @@ const App = () => {
         />
 
         <Routes>
-          <Route index element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId}/>} />
+          <Route index element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
           <Route path='league-score' element={<LeagueScore />} />
-          <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId}/>} />
+          <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
           <Route path='rules' element={<Rules/>}/>
         </Routes>
       </Router>

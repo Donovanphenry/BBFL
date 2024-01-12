@@ -16,6 +16,7 @@ const NFL = (props) => {
     supabase,
     user,
     weekId,
+    weekType,
   } = props;
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const NFL = (props) => {
             timestamp_selected: submission_time,
             user_id: user_id,
             week_number: weekId,
+            week_type: weekType,
           }
 
           picks.push(pick);
@@ -61,7 +63,7 @@ const NFL = (props) => {
      .upsert(
        picks,
        {
-         onConflict: ["user_id", "week_number", "pick_number"],
+         onConflict: ["user_id", "week_number", "week_type", "pick_number"],
          returning: ["*"],
        }
      );

@@ -53,7 +53,9 @@ const get_fixtures = async () => {
     week_num += 1;
   }
 
-  const events_url = `${url}/seasons/${year_of_season}/types/2/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
+  const season_type = data.season.type.type;
+
+  const events_url = `${url}/seasons/${year_of_season}/types/${season_type}/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
   const events_res = await fetch(events_url);
   const events_data = await events_res.json();
   const events = events_data.items;
@@ -106,7 +108,9 @@ const get_user_fixtures = async (setFixtures, supabase) => {
     week_num += 1;
   }
 
-  const events_url = `${url}/seasons/${year_of_season}/types/2/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
+  const season_type = data.season.type.type;
+
+  const events_url = `${url}/seasons/${year_of_season}/types/${season_type}/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
   const events_res = await fetch(events_url);
   const events_data = await events_res.json();
   const events = events_data.items;
@@ -263,12 +267,12 @@ const extract_fixtures = async (evt) => {
   return fixture;
 };
 
-const get_current_week = async () => {
+const get_week_type = async () => {
   const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
   const res = await fetch(url);
   const data = await res.json();
 
-  return data.season.type.week.number;
-};
+  return data.season.type.type;
+}
 
-export { get_week_num, get_fixtures, get_user_fixtures };
+export { get_week_num, get_week_type, get_fixtures, get_user_fixtures };
