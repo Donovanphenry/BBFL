@@ -85,12 +85,12 @@ export default function LoginModal(props) {
           {formErrors.password && <p className='error'>{formErrors.password}</p>}
         </div>
         <div className='buttonWrapper'>
-          <button className='login-button'>Cancel</button>
+          <button id='login-button'>Cancel</button>
           <button className='actionButton' onClick={handleLogin}>
             Sign in
           </button>
         </div>
-        <button
+        <button id="login-button"
           onClick={() => {
             setModalState(modal_state.Register);
           }}

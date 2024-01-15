@@ -79,6 +79,7 @@
   justify-content: center;
   gap: 1rem;
 }
+
 .actionButton {
   background-color: #2f68fe !important;
   color: white;
@@ -89,6 +90,8 @@
     background-color: #1f4ab5 !important;
   }
 }
+
+
 .dangerButton {
   background-color: #cc3300 !important;
   color: white;
@@ -100,17 +103,14 @@
   }
 }
 
-.login-input
-{
+.login-input {
   background-color: #353839;
   color: #FDF5E6;
   border: 0px;
 }
 
-.login-button
+#login-button
 {
-  background-color: #353839;
   background: #353839;
   color: #FDF5E6;
 }
-
