@@ -1,31 +1,12 @@
-.container
-{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+.snackbarSettings {
+  display: block;
+  text-align: center;
 }
 
-.matches-container
-{
-  display: grid;
+.onTime {
+  background: rgb(22, 105, 22);
 }
 
-.button-container
-{
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.select-picks-button
-{
-  width: 200px;
-  height: 40px;
-}
-
-.league-select
-{
-  color: white;
-  width: 500px;
+.late {
+  background: rgb(196, 56, 56);
 }
