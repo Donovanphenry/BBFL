@@ -12,7 +12,7 @@ import SportsFootballIcon from '@mui/icons-material/SportsFootball';
 
 import './Matchup.css';
 
-const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
+const Matchup = ({is_late_pick, players, match, match_index, fixtures, setFixtures}) => {
 //  const text = document.getElementById('text');
 //  const bar = document.getElementById('bar');
 //  if (bar) {
@@ -59,33 +59,6 @@ const Matchup = ({players, match, match_index, fixtures, setFixtures}) => {
     });
 
     return date_time_format.format(date) + ' PST';
-  };
-
-  const is_late_pick = (kickoff_time) => {
-    const kickoff_date = new Date(kickoff_time);
-    const timeZone = 'America/Los_Angeles';
-    const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(kickoff_date);
-    const curr_date_la = new Date(new Date().toLocaleString("en-US", {timeZone: timeZone}));
-
-    if (kickoff_day === 'Thursday' && curr_date_la < kickoff_date)
-      return false;
-    if (kickoff_day === 'Thursday')
-      return true;
-
-    let earliest_sunday_fixture_date = curr_date_la;
-    for (const fixture of fixtures)
-    {
-      const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", { timeZone: timeZone }));
-
-      if (fixture_date_la.getDay() === 0 && fixture_date_la < earliest_sunday_fixture_date)
-      {
-        earliest_sunday_fixture_date = fixture_date_la;
-      }
-    }
-
-    if (curr_date_la <= earliest_sunday_fixture_date)
-      return false;
-    return true;
   };
 
   return (

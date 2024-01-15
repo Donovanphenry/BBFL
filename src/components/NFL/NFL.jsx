@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import {Matchup} from '../Matchup';
 import {
-  Button
+  Button,
+  Snackbar,
 } from '@mui/material';
 
 import {
   get_user_fixtures
 } from '../../Utils/espn-api-parser.ts';
+import './NFL.css';
 
 const NFL = (props) => {
   const [fixtures, setFixtures] = useState([]);
+  const duration = 2000;
+  const [
+    hungry,
+    setHungry
+   ] = useState(false);
 
+   const [
+    lateMsg,
+    setLateMsg
+   ] = useState(false);
+   
   const {
     players,
     supabase,
@@ -31,14 +43,21 @@ const NFL = (props) => {
   const submit_picks = async () => {
     if (!user)
       return;
+
     const user_id = user.id;
 
     const submission_time = new Date();
     const picks = [];
 
+    let lateFound = false;
+
     for (const fixture_idx in fixtures)
     {
       const fixture = fixtures[fixture_idx];
+      if (is_late_pick(fixture.kickoff_time)){
+        lateFound = true;
+        continue;
+      }
       for (const team in fixture.competitors)
       {
         const team_name = fixture.competitors[team].name;
@@ -52,12 +71,14 @@ const NFL = (props) => {
             week_number: weekId,
             week_type: weekType,
           }
-
+          
           picks.push(pick);
         }
       }
+      
     }
-
+    setLateMsg(lateFound);s
+    
     const upsert_res = await supabase
      .from("user_picks")
      .upsert(
@@ -67,18 +88,59 @@ const NFL = (props) => {
          returning: ["*"],
        }
      );
-
-    window.location.reload();
+    setHungry(true);
   }
 
+  const display_message = (lateMsg) => {
+    return lateMsg ? "One or more picks were marked as late" : "All pick successfully submitted";
+  }
+
+  const is_late_pick = (kickoff_time) => {
+    const kickoff_date = new Date(kickoff_time);
+    const timeZone = 'America/Los_Angeles';
+    const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(kickoff_date);
+    const curr_date_la = new Date(new Date().toLocaleString("en-US", {timeZone: timeZone}));
+
+    if (kickoff_day === 'Thursday' && curr_date_la < kickoff_date)
+      return false;
+    if (kickoff_day === 'Thursday')
+      return true;
+
+    let earliest_sunday_fixture_date = curr_date_la;
+    for (const fixture of fixtures)
+    {
+      const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", { timeZone: timeZone }));
+
+      if (fixture_date_la.getDay() === 0 && fixture_date_la < earliest_sunday_fixture_date)
+      {
+        earliest_sunday_fixture_date = fixture_date_la;
+      }
+    }
+
+    if (curr_date_la <= earliest_sunday_fixture_date)
+      return false;
+    return true;
+  };
+  
   return fixtures &&
     <div className = 'container'>
       <div className = 'matches-container'>
         {
-          fixtures.map((match, match_index) => <Matchup key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players}/>)
+          fixtures.map((match, match_index) => <Matchup is_late_pick = {is_late_pick} key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players}/>)
         }
       </div>
+      <Snackbar 
+        open={hungry}
+        message={display_message(lateMsg)}
+        anchorOrigin={{vertical:'top', horizontal:'center'}}
+        onClose={() => setHungry(false)}
+        autoHideDuration={duration}
+        ContentProps={{
+          className: `snackbarSettings ${lateMsg ? "late" : "onTime"}`
+        }}
+          
 
+      />
       <div className = 'button-container'>
         <Button
           className = 'select-picks-button'
