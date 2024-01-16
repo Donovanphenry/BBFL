@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Matchup} from '../Matchup';
 import {
+  Alert,
   Button,
   Snackbar,
 } from '@mui/material';
@@ -8,11 +9,17 @@ import {
 import {
   get_user_fixtures
 } from '../../Utils/espn-api-parser.ts';
+
 import './NFL.css';
 
 const NFL = (props) => {
-  const [fixtures, setFixtures] = useState([]);
+  const [
+    fixtures,
+    setFixtures
+  ] = useState([]);
+
   const duration = 2000;
+
   const [
     hungry,
     setHungry
@@ -30,6 +37,8 @@ const NFL = (props) => {
     weekId,
     weekType,
   } = props;
+
+  const pick_submission_status = lateMsg ? 'error' : 'success';
 
   useEffect(() => {
     get_user_fixtures(setFixtures, supabase);
@@ -76,7 +85,7 @@ const NFL = (props) => {
         }
       }
     }
-    setLateMsg(lateFound);s
+    setLateMsg(lateFound);
 
     const upsert_res = await supabase
      .from("user_picks")
@@ -134,16 +143,17 @@ const NFL = (props) => {
       </div>
       <Snackbar
         open={hungry}
-        message={display_message(lateMsg)}
         anchorOrigin={{vertical:'top', horizontal:'center'}}
         onClose={() => setHungry(false)}
         autoHideDuration={duration}
-        ContentProps={{
-          className: `snackbarSettings ${lateMsg ? "late" : "onTime"}`
-        }}
-
-
-      />
+      >
+        <Alert
+          severity={pick_submission_status}
+          variant='filled'
+        >
+          {display_message(lateMsg)}
+        </Alert>
+      </Snackbar>
       <div className = 'button-container'>
         <Button
           className = 'select-picks-button'
