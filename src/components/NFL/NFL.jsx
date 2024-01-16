@@ -22,7 +22,7 @@ const NFL = (props) => {
     lateMsg,
     setLateMsg
    ] = useState(false);
-   
+
   const {
     players,
     supabase,
@@ -71,14 +71,13 @@ const NFL = (props) => {
             week_number: weekId,
             week_type: weekType,
           }
-          
+
           picks.push(pick);
         }
       }
-      
     }
     setLateMsg(lateFound);s
-    
+
     const upsert_res = await supabase
      .from("user_picks")
      .upsert(
@@ -101,27 +100,31 @@ const NFL = (props) => {
     const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(kickoff_date);
     const curr_date_la = new Date(new Date().toLocaleString("en-US", {timeZone: timeZone}));
 
-    if (kickoff_day === 'Thursday' && curr_date_la < kickoff_date)
+    const [SUNDAY, MONDAY, SATURDAY] = [0, 1, 6];
+    const isolated_days = new Set(['Thursday', 'Friday']);
+    const combined_days = new Set([SUNDAY, MONDAY, SATURDAY]);
+
+    if (isolated_days.has(kickoff_day) && curr_date_la <= kickoff_date)
       return false;
-    if (kickoff_day === 'Thursday')
+    if (isolated_days.has(kickoff_day))
       return true;
 
-    let earliest_sunday_fixture_date = curr_date_la;
+    let earliest_combined_fixture_date = curr_date_la;
     for (const fixture of fixtures)
     {
       const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", { timeZone: timeZone }));
 
-      if (fixture_date_la.getDay() === 0 && fixture_date_la < earliest_sunday_fixture_date)
+      if (combined_days.has(fixture_date_la.getDay()) && fixture_date_la < earliest_combined_fixture_date)
       {
-        earliest_sunday_fixture_date = fixture_date_la;
+        earliest_combined_fixture_date = fixture_date_la;
       }
     }
 
-    if (curr_date_la <= earliest_sunday_fixture_date)
+    if (curr_date_la <= earliest_combined_fixture_date)
       return false;
     return true;
   };
-  
+
   return fixtures &&
     <div className = 'container'>
       <div className = 'matches-container'>
@@ -129,7 +132,7 @@ const NFL = (props) => {
           fixtures.map((match, match_index) => <Matchup is_late_pick = {is_late_pick} key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players}/>)
         }
       </div>
-      <Snackbar 
+      <Snackbar
         open={hungry}
         message={display_message(lateMsg)}
         anchorOrigin={{vertical:'top', horizontal:'center'}}
@@ -138,7 +141,7 @@ const NFL = (props) => {
         ContentProps={{
           className: `snackbarSettings ${lateMsg ? "late" : "onTime"}`
         }}
-          
+
 
       />
       <div className = 'button-container'>
