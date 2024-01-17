@@ -29,12 +29,15 @@ const WeekScoreRow = props => {
 
   return (
     <React.Fragment>
-      <TableRow>
+      <TableRow
+        className='userRow'
+        onClick={() => setOpen(!open)}
+      >
+          
         <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
             sx={{color: 'white'}}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
