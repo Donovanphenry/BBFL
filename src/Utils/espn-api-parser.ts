@@ -118,10 +118,13 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   const fixtures = await get_fixtures();
 
   const user_id = await user.id;
-  let user_picks = []
+  let user_picks = [];
+  let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks"
+
+
   if (user_id) {
     const { data, error } = await supabase
-      .from("user_picks")
+      .from(pick_type)
       .select("*")
       .eq("user_id", user_id)
       .eq("week_number", week_num);

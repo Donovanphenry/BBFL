@@ -87,8 +87,10 @@ const NFL = (props) => {
     }
     setLateMsg(lateFound);
 
+    let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks"
+
     const upsert_res = await supabase
-     .from("user_picks")
+     .from(pick_type)
      .upsert(
        picks,
        {
