@@ -1,3 +1,24 @@
+const calculate_refresh_rate = (fixture) => {
+  const NUM_QUARTERS = 4;
+  const MINUTES_PER_QUARTER = 15;
+
+  const [quarter_info, time_info] = fixture.game_time.split(' - ');
+
+  const quarter = parseInt(quarter_info.charAt(1), 10);
+  const quarter_modifier = NUM_QUARTERS - quarter;
+
+  const [minutes, seconds] = time_info.split(':').map(Number);
+
+  return convert_minutes_to_ms(quarter_modifier + minutes / MINUTES_PER_QUARTER + 0.5);
+};
+
+const convert_minutes_to_ms = (minutes) => {
+  const SECONDS_PER_MINUTE = 60;
+  const MS_PER_SECOND = 1000;
+
+  return minutes * SECONDS_PER_MINUTE * MS_PER_SECOND;
+}
+
 const get_week_num = async () => {
   const curr_day_of_week = (new Date()).toLocaleString("en-US", {
     timezone: "America/Los_Angeles",
@@ -81,46 +102,14 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   {
     console.error("Ouf: ", error);
   }
-
   const user = user_res.data.user;
-  const curr_day_of_week = (new Date()).toLocaleString("en-US", {
-    timezone: "America/Los_Angeles",
-    weekday: 'long',
-  });
-
-  // Create a new Date object to represent the current date and time
-  const currentDate = new Date();
-
-  // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
-  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const year_of_season = data.season.year;
-
-  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
-  const week_res = await fetch(week_url);
-  const week_data = await week_res.json();
-
-  let week_num = week_data.number;
-  if (curr_day_of_week == "Tuesday")
-  {
-    week_num += 1;
-  }
-
-  const season_type = data.season.type.type;
-
-  const events_url = `${url}/seasons/${year_of_season}/types/${season_type}/weeks/${week_num}/events?lang=en&region=us`.replace(/^http:/, 'https:');
-  const events_res = await fetch(events_url);
-  const events_data = await events_res.json();
-  const events = events_data.items;
 
   const fixtures = await get_fixtures();
+  const week_num = await get_week_num();
 
   const user_id = await user.id;
   let user_picks = [];
   let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks"
-
 
   if (user_id) {
     const { data, error } = await supabase
@@ -137,11 +126,16 @@ const get_user_fixtures = async (setFixtures, supabase) => {
     user_picks = data;
   }
 
+  let smallest_refresh_rate = null;
   fixtures.map((fixture, idx) => {
     const pick = user_picks.find((pick) => {
       return pick.pick_number === idx
     });
 
+    const curr_refresh_rate = calculate_refresh_rate(fixture);
+
+    if (!smallest_refresh_rate || curr_refresh_rate < smallest_refresh_rate)
+      smallest_refresh_rate = curr_refresh_rate;
     if (pick) {
       if (pick.selected_team === 'home')
       {
@@ -157,6 +151,7 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   });
 
   setFixtures(fixtures);
+  return smallest_refresh_rate;
 };
 
 const extract_fixtures = async (evt) => {
