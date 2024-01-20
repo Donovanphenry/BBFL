@@ -41,7 +41,17 @@ const NFL = (props) => {
   const pick_submission_status = lateMsg ? 'error' : 'success';
 
   useEffect(() => {
-    get_user_fixtures(setFixtures, supabase);
+    const setupInterval = async () => {
+      const refresh_delay = await get_user_fixtures(setFixtures, supabase);
+
+      const intervalId = setInterval(() => {
+        get_user_fixtures(setFixtures, supabase);
+      }, refresh_delay);
+
+      return () => clearInterval(intervalId);
+    }
+
+    setupInterval();
   }, []);
 
   const cancel_picks = async () => {
