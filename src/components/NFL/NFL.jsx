@@ -117,9 +117,11 @@ const NFL = (props) => {
 
   const is_late_pick = (kickoff_time) => {
     const kickoff_date = new Date(kickoff_time);
-    const timeZone = 'America/Los_Angeles';
-    const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone }).format(kickoff_date);
-    const curr_date_la = new Date(new Date().toLocaleString("en-US", {timeZone: timeZone}));
+    const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const kickoff_day = new Intl.DateTimeFormat('en-US', { weekday: 'long', user_timezone }).format(kickoff_date);
+    const curr_date_la = new Date(new Date().toLocaleString("en-US", {
+      timeZone: user_timezone,
+    }));
 
     const [SUNDAY, MONDAY, SATURDAY] = [0, 1, 6];
     const isolated_days = new Set(['Thursday', 'Friday']);
@@ -133,7 +135,9 @@ const NFL = (props) => {
     let earliest_combined_fixture_date = curr_date_la;
     for (const fixture of fixtures)
     {
-      const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", { timeZone: timeZone }));
+      const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", {
+        timeZone: user_timezone,
+      }));
 
       if (combined_days.has(fixture_date_la.getDay()) && fixture_date_la < earliest_combined_fixture_date)
       {
