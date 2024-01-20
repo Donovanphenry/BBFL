@@ -52,13 +52,29 @@ const Matchup = ({is_late_pick, players, match, match_index, fixtures, setFixtur
   const get_readable_kickoff_time = (kickoff_time) => {
     const date = new Date(kickoff_time);
 
+    const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const date_time_format = new Intl.DateTimeFormat('en', {
       dateStyle: 'full',
       timeStyle: 'short',
-      timeZone: 'America/Los_Angeles',
+      timeZone: user_timezone,
     });
 
-    return date_time_format.format(date) + ' PST';
+    const formatted_date = new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+
+    const formatted_time = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: user_timezone,
+      timeZoneName: 'short',
+    }).format(date);
+
+
+    return `${formatted_date} at ${formatted_time}`;
   };
 
   return (

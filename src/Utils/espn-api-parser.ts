@@ -19,11 +19,18 @@ const convert_minutes_to_ms = (minutes) => {
   return minutes * SECONDS_PER_MINUTE * MS_PER_SECOND;
 }
 
-const get_week_num = async () => {
+const get_curr_day_of_week = async () => {
+  const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const curr_day_of_week = (new Date()).toLocaleString("en-US", {
-    timezone: "America/Los_Angeles",
+    timeZone: user_timezone,
     weekday: 'long',
   });
+
+  return curr_day_of_week;
+}
+
+const get_week_num = async () => {
+  const curr_day_of_week = get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
   const currentDate = new Date();
@@ -49,10 +56,7 @@ const get_week_num = async () => {
 }
 
 const get_fixtures = async () => {
-  const curr_day_of_week = (new Date()).toLocaleString("en-US", {
-    timezone: "America/Los_Angeles",
-    weekday: 'long',
-  });
+  const curr_day_of_week = get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
   const currentDate = new Date();
