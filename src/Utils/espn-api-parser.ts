@@ -42,11 +42,14 @@ const get_week_num = async () => {
 
   const year_of_season = data.season.year;
 
-  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  const week_url = data.season.type.weeks["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
   let week_num = week_data.number;
+  if (!week_num) {
+    week_num = 1;
+  }
   if (curr_day_of_week == "Tuesday")
   {
     week_num += 1;
@@ -65,14 +68,15 @@ const get_fixtures = async () => {
   const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
   const res = await fetch(url);
   const data = await res.json();
-
   const year_of_season = data.season.year;
 
-  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  const week_url = data.season.type.weeks["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
   let week_num = week_data.number;
+  if (!week_num)
+      week_num = 1;
   if (curr_day_of_week == "Tuesday")
   {
     week_num += 1;
@@ -85,7 +89,7 @@ const get_fixtures = async () => {
   const events_data = await events_res.json();
   const events = events_data.items;
 
-  const fixtures = await Promise.all(events.map(evt => extract_fixtures(evt)));
+  const fixtures = await Promise.all(events.map(evt => extract_fixtures(evt, season_type)));
 
   fixtures.sort((a, b) => {
     if (a.kickoff_time < b.kickoff_time)
@@ -104,7 +108,7 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   const user_res = await supabase.auth.getUser();
   if (user_res.error)
   {
-    console.error("Ouf: ", error);
+    console.error("Ouf: ", user_res.error);
   }
   const user = user_res.data.user;
 
@@ -158,7 +162,7 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   return smallest_refresh_rate;
 };
 
-const extract_fixtures = async (evt) => {
+const extract_fixtures = async (evt, season_type) => {
   const match_url = evt['$ref'].replace(/^http:/, 'https:');
   const match_res = await fetch(match_url);
   const match_data = await match_res.json();
@@ -237,7 +241,9 @@ const extract_fixtures = async (evt) => {
     competitor['name'] = team_data.displayName;
     competitor['pic'] = team_data.logos[0].href;
 
-    const record_url = competitor_data.record['$ref'].replace(/^http:/, 'https:');
+
+    let record_url = competitor_data.record['$ref'].replace(/^http:/, 'https:');
+    record_url = record_url.replace(/types\/\d+/, `types/${season_type}`);
     const record_res = await fetch(record_url);
     const record_data = await record_res.json();
 
