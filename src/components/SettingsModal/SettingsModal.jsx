@@ -21,13 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import './SettingsModal.css';
 
-import { createClient } from "@supabase/supabase-js";
-import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
-
-const api_key = import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY;
-const api_url = import.meta.env.VITE_REACT_APP_SUPABASE_API_URL;
-const supabase = createClient(api_url, api_key);
+import { supabase } from '/src/Utils/supabase-helpers';
 
 const SettingsModal = ({setUsername, settingsOpen, setSettingsOpen, supabase}) => {
   const navigate = useNavigate();
@@ -40,7 +34,7 @@ const SettingsModal = ({setUsername, settingsOpen, setSettingsOpen, supabase}) =
       }
 
       setSettingsOpen(false);
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.error("Error signing out:", error.message);
     }

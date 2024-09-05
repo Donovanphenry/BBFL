@@ -21,12 +21,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { createClient } from "@supabase/supabase-js";
 
-
-const api_key = import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY;
-const api_url = import.meta.env.VITE_REACT_APP_SUPABASE_API_URL;
-const supabase = createClient(api_url, api_key);
+import { supabase } from '/src/Utils/supabase-helpers';
 
 const modal_state = {
   Confirm: "Confirm",
