@@ -96,7 +96,7 @@ const App = () => {
         />
 
         <Routes>
-          <Route path='' element={
+          <Route path='login' element={
             <LoginModal
               modal_state={modal_state}
               setModalState={setModalState}
@@ -106,7 +106,7 @@ const App = () => {
           } />
 
           <Route element={<ProtectedRoute isAuthenticated={user !== null}/>}>
-            <Route index path='picks' element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
+            <Route index path='/' element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
             <Route path='league-score' element={<LeagueScore />} />
             <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
             <Route path='rules' element={<Rules/>}/>

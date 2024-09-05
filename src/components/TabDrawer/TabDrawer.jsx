@@ -17,19 +17,19 @@ const TabDrawer = (props) => {
   const pages = [
     {
       name: 'Make Picks',
-      path: 'picks'
+      path: '',
     },
     {
       name: 'Check League Score',
-      path: 'league-score'
+      path: 'league-score',
     },
     {
       name: 'Rules',
-      path: 'rules'
+      path: 'rules',
     },
     {
       name: 'Week Scores',
-      path: 'week-scores'
+      path: 'week-scores',
     },
   ];
   const navigate = useNavigate();

@@ -41,7 +41,7 @@ const NavBar = (props) => {
           </IconButton>
 
           <div className = 'league-icon-container'>
-            <Typography className = 'league-icon' onClick = {() => navigate('/picks')}>
+            <Typography className = 'league-icon' onClick = {() => navigate('/')}>
              Bing Bong League
             </Typography>
           </div>

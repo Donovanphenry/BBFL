@@ -26,9 +26,9 @@ export default function LoginModal(props) {
   useEffect(() => {
     supabase.auth.onAuthStateChange(async (event) => {
       if (event === "SIGNED_IN") {
-        navigate('/picks');
-      } else {
         navigate('/');
+      } else {
+        navigate('/login');
       }
     });
   }, []);
