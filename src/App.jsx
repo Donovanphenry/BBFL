@@ -18,7 +18,6 @@ import {
 
 import { get_week_num, get_week_type } from '/src/Utils/espn-api-parser';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import players_data from './data/players.json';
 
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 
@@ -40,8 +39,6 @@ const App = () => {
   const [userId, setUserId] = useState(null);
   const [weekId, setWeekId] = useState(null);
   const [weekType, setWeekType] = useState(null);
-  const persisted_players = localStorage.getItem('players');
-  const players = persisted_players ? JSON.parse(persisted_players) : players_data;
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -102,7 +99,7 @@ const App = () => {
           } />
 
           <Route element={<ProtectedRoute isAuthenticated={user !== null}/>}>
-            <Route index path='/' element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
+            <Route index path='/' element={<Picks supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
             <Route path='league-score' element={<LeagueScore />} />
             <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
             <Route path='rules' element={<Rules/>}/>

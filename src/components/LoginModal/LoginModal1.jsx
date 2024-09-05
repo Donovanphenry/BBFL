@@ -20,13 +20,18 @@ export default function LoginModal(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange(async (event) => {
+    const { data: { subscription : authListener } } = supabase.auth.onAuthStateChange(async (event) => {
+      console.log("supa-event = ", event);
       if (event === "SIGNED_IN") {
         navigate('/');
       } else {
         navigate('/login');
       }
     });
+
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, []);
 
   return (

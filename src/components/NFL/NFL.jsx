@@ -31,7 +31,6 @@ const NFL = (props) => {
    ] = useState(false);
 
   const {
-    players,
     supabase,
     user,
     weekId,
@@ -154,7 +153,7 @@ const NFL = (props) => {
     <div className = 'container'>
       <div className = 'matches-container'>
         {
-          fixtures.map((match, match_index) => <Matchup is_late_pick = {is_late_pick} key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} players = {players}/>)
+          fixtures.map((match, match_index) => <Matchup is_late_pick = {is_late_pick} key = {match_index} match_index = {match_index} fixtures = {fixtures} setFixtures = {setFixtures} match = {match} />)
         }
       </div>
       <Snackbar

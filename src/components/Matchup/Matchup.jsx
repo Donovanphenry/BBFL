@@ -12,7 +12,7 @@ import SportsFootballIcon from '@mui/icons-material/SportsFootball';
 
 import './Matchup.css';
 
-const Matchup = ({is_late_pick, players, match, match_index, fixtures, setFixtures}) => {
+const Matchup = ({is_late_pick, match, match_index, fixtures, setFixtures}) => {
 //  const text = document.getElementById('text');
 //  const bar = document.getElementById('bar');
 //  if (bar) {
