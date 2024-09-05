@@ -17,7 +17,7 @@ const TabDrawer = (props) => {
   const pages = [
     {
       name: 'Make Picks',
-      path: ''
+      path: 'picks'
     },
     {
       name: 'Check League Score',
