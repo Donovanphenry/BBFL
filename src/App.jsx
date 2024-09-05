@@ -10,13 +10,14 @@ import {
   LoginModal,
   LeagueScore,
   Picks,
+  ProtectedRoute,
   Rules,
   SettingsModal,
   WeekScores,
 } from './components';
 
 import { get_week_num, get_week_type } from '/src/Utils/espn-api-parser';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import players_data from './data/players.json';
 
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -48,26 +49,16 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
+    const getUserData = async () => {
+      const user_obj = await getUser();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    const set_user = async () => {
-      const ref_user = await getUser();
-      setUser(ref_user);
-    };
-
-    set_user();
-
+      if (user_obj?.user) {
+        setUserId(user_obj.user.id);
+        setUser(user_obj.user);
+      }
+    }
+    getUserData();
     setWeekInfo();
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const setWeekInfo = async () => {
@@ -78,45 +69,48 @@ const App = () => {
   }
 
   async function getUser() {
-    const { data, error } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
 
-    if (error) {
-      console.error('Failure getting user: ', error);
-    }
-
-    return data.user;
+    return data;
   };
-
-  if (!session) {
-    return (<AuthModal supabase={supabase} modal_state = {modal_state} setModalState={setModalState} modalState={modalState} setUserId={setUserId}/>)
-  }
 
   return (
     <div className="App">
       <Router>
         <NavBar
-          showTabDrawer = {showTabDrawer}
-          setShowTabDrawer = {setShowTabDrawer}
-          setSettingsOpen = {setSettingsOpen}
-          username = {username}
+          showTabDrawer={showTabDrawer}
+          setShowTabDrawer={setShowTabDrawer}
+          setSettingsOpen={setSettingsOpen}
+          username={username}
         />
         <TabDrawer
-          showTabDrawer = {showTabDrawer}
-          setShowTabDrawer = {setShowTabDrawer}
+          showTabDrawer={showTabDrawer}
+          setShowTabDrawer={setShowTabDrawer}
         />
         <SettingsModal
-          settingsOpen = {settingsOpen}
-          setSettingsOpen = {setSettingsOpen}
-          setUsername = {setUsername}
+          settingsOpen={settingsOpen}
+          setSettingsOpen={setSettingsOpen}
+          setUsername={setUsername}
           supabase={supabase}
-          username = {username}
+          username={username}
         />
 
         <Routes>
-          <Route index element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
-          <Route path='league-score' element={<LeagueScore />} />
-          <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
-          <Route path='rules' element={<Rules/>}/>
+          <Route path='' element={
+            <LoginModal
+              modal_state={modal_state}
+              setModalState={setModalState}
+              modalState={modalState}
+              setUserId={setUserId}
+            />
+          } />
+
+          <Route element={<ProtectedRoute isAuthenticated={user !== null}/>}>
+            <Route index path='picks' element={<Picks players={players} supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
+            <Route path='league-score' element={<LeagueScore />} />
+            <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
+            <Route path='rules' element={<Rules/>}/>
+          </Route>
         </Routes>
       </Router>
     </div>

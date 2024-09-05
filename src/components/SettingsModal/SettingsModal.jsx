@@ -1,6 +1,9 @@
 import {
   useState
 } from 'react';
+import {
+  useNavigate
+} from 'react-router-dom';
 
 import {
   Button,
@@ -18,7 +21,16 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import './SettingsModal.css';
 
+import { createClient } from "@supabase/supabase-js";
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+
+const api_key = import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY;
+const api_url = import.meta.env.VITE_REACT_APP_SUPABASE_API_URL;
+const supabase = createClient(api_url, api_key);
+
 const SettingsModal = ({setUsername, settingsOpen, setSettingsOpen, supabase}) => {
+  const navigate = useNavigate();
   const initiateLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -28,6 +40,7 @@ const SettingsModal = ({setUsername, settingsOpen, setSettingsOpen, supabase}) =
       }
 
       setSettingsOpen(false);
+      navigate('/');
     } catch (error) {
       console.error("Error signing out:", error.message);
     }
