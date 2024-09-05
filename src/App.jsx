@@ -17,7 +17,7 @@ import {
 } from './components';
 
 import { get_week_num, get_week_type } from '/src/Utils/espn-api-parser';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 
