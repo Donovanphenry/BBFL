@@ -20,11 +20,15 @@ export default function LoginModal(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription : authListener } } = supabase.auth.onAuthStateChange(async (event) => {
-      console.log("supa-event = ", event);
-      if (event === "SIGNED_IN") {
-        navigate('/');
+    const { data: { subscription : authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("supa-event, supa-session = ", event, session);
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+        if (session) {
+          console.log("Navigating to home page");
+          navigate('/');
+        }
       } else {
+        console.log("Navigating to login page");
         navigate('/login');
       }
     });
