@@ -33,7 +33,6 @@ const WeekScoreRow = props => {
         className='userRow'
         onClick={() => setOpen(!open)}
       >
-          
         <TableCell>
           <IconButton
             aria-label="expand row"

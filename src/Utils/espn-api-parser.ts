@@ -4,7 +4,7 @@ const calculate_refresh_rate = (fixture) => {
 
   const [quarter_info, time_info] = fixture.game_time.split(' - ');
 
-  const quarter = parseInt(quarter_info.charAt(1), 10);
+  const quarter = Math.min(parseInt(quarter_info.charAt(1), 10), NUM_QUARTERS);
   const quarter_modifier = NUM_QUARTERS - quarter;
 
   const [minutes, seconds] = time_info.split(':').map(Number);
