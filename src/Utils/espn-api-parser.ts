@@ -42,7 +42,7 @@ const get_week_num = async () => {
 
   const year_of_season = data.season.year;
 
-  const week_url = data.season.type.weeks["$ref"].replace(/^http:/, 'https:');
+  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
@@ -70,7 +70,7 @@ const get_fixtures = async () => {
   const data = await res.json();
   const year_of_season = data.season.year;
 
-  const week_url = data.season.type.weeks["$ref"].replace(/^http:/, 'https:');
+  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
