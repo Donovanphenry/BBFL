@@ -67,12 +67,33 @@ const NFL = (props) => {
     const submission_time = new Date();
     const picks = [];
 
+    const old_picks = [];
+
+    const set_old_picks = (fixtures) => {
+      for (let i = 0; i < fixtures.length; ++i) {
+        old_picks[i] = fixtures[i];
+      }
+    };
+    await get_user_fixtures(set_old_picks, supabase);
+
+    if (old_picks.length !== fixtures.length) {
+      console.error(`old_picks.length (${old_picks.length}) !== fixtures.length (${fixtures.length})`);
+      return;
+    }
+
+    const diff_picks = new Set([]);
+    for (let i = 0; i < fixtures.length; ++i) {
+      if (old_picks[i].competitors.away.pick !== fixtures[i].competitors.away.pick) {
+        diff_picks.add(i);
+      }
+    }
+
     let lateFound = false;
 
     for (const fixture_idx in fixtures)
     {
       const fixture = fixtures[fixture_idx];
-      if (is_late_pick(fixture.kickoff_time)){
+      if (diff_picks.has(fixture_idx) && is_late_pick(fixture.kickoff_time)){
         lateFound = true;
         continue;
       }
