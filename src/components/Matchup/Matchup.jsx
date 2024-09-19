@@ -83,11 +83,11 @@ const Matchup = ({is_late_pick, match, match_index, fixtures, setFixtures}) => {
         <div className = 'team-div' onClick = {() => changeWinner([{'team': 'home', 'pick': 'win'}, {'team': 'away', 'pick': 'lose'}])}>
           <img className = 'team-picture' src = {match.competitors.home.pic} />
 
-          <Typography sx={{fontWeight: 'bold'}} className = {get_team_class(match.competitors.home)}>
+          <p className={get_team_class(match.competitors.home)}>
             {match.competitors.home.name} ({match.competitors.home.record})
-          </Typography>
+          </p>
 
-          <Typography className = {`match-score ${get_team_class(match.competitors.home)}`}>
+          <p className = {`match-score ${get_team_class(match.competitors.home)}`}>
             <span className={match.competitors.home.winner ? 'match-winners-icon' : 'match-losers-icon'}>
               <CelebrationIcon/>
             </span>
@@ -99,7 +99,7 @@ const Matchup = ({is_late_pick, match, match_index, fixtures, setFixtures}) => {
                 {match.competitors.home.score}
               </span>
             }
-          </Typography>
+          </p>
 
           { match.competitors.home.possessor &&
             <div className='possessor-container'>
@@ -113,9 +113,9 @@ const Matchup = ({is_late_pick, match, match_index, fixtures, setFixtures}) => {
         <div className = 'team-div' onClick = {() => changeWinner([{'team': 'home', 'pick': 'lose'}, {'team': 'away', 'pick': 'win'}])}>
           <img className = 'team-picture' src = {match.competitors.away.pic} />
 
-          <Typography sx={{fontWeight: 'bold'}} className = {get_team_class(match.competitors.away)}>
+          <p className={get_team_class(match.competitors.away)}>
             {match.competitors.away.name} ({match.competitors.away.record})
-          </Typography>
+          </p>
 
           <Typography className = {`match-score ${get_team_class(match.competitors.away)}`}>
             <span className={match.competitors.away.winner ? 'match-winners-icon' : 'match-losers-icon'}>
