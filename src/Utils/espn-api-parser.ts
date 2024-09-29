@@ -142,7 +142,8 @@ const get_user_fixtures = async (setFixtures, supabase) => {
 
     const curr_refresh_rate = calculate_refresh_rate(fixture);
 
-    if (!smallest_refresh_rate || curr_refresh_rate < smallest_refresh_rate)
+    if (!smallest_refresh_rate || (curr_refresh_rate !== null &&
+                                   curr_refresh_rate < smallest_refresh_rate))
       smallest_refresh_rate = curr_refresh_rate;
     if (pick) {
       if (pick.selected_team === 'home')
@@ -159,7 +160,8 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   });
 
   setFixtures(fixtures);
-  return smallest_refresh_rate;
+  return fixtures.some((e) => e.is_active) ?
+    smallest_refresh_rate : null;
 };
 
 const extract_fixtures = async (evt, season_type) => {

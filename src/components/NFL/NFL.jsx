@@ -43,11 +43,15 @@ const NFL = (props) => {
     const setupInterval = async () => {
       const refresh_delay = await get_user_fixtures(setFixtures, supabase);
 
-      const intervalId = setInterval(() => {
-        get_user_fixtures(setFixtures, supabase);
-      }, refresh_delay);
+      if (refresh_delay) {
+        const intervalId = setInterval(() => {
+          if (refresh_delay !== null) {
+            get_user_fixtures(setFixtures, supabase);
+          }
+        }, refresh_delay);
 
-      return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId);
+      }
     }
 
     setupInterval();
