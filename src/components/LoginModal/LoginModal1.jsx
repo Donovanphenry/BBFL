@@ -4,7 +4,9 @@ import {
   useState,
 } from 'react';
 import {
-  useNavigate
+  useLocation,
+  Navigate,
+  useNavigate,
 } from 'react-router-dom';
 
 import './LoginModal.css';
@@ -18,15 +20,16 @@ import { supabase } from '/src/Utils/supabase-helpers';
 export default function LoginModal(props) {
   const { modal_state, setModalState, setUserId } = props;
   const navigate = useNavigate();
+  const loc = useLocation();
 
   useEffect(() => {
     const { data: { subscription : authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
         if (session) {
-          navigate('/');
+          navigate(loc.state?.from?.pathname || '/');
         }
       } else {
-        navigate('/login');
+        return <Navigate to='/login'/>;
       }
     });
 
