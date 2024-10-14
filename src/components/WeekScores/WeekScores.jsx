@@ -33,7 +33,7 @@ const WeekScores = (props) => {
   const [userResults, setUserResults] = useState([]);
   const [fixtures, setFixtures] = useState([]);
 
-  let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks"
+  let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks";
 
   useEffect(() => {
     const get_all_users_picks = async () => {

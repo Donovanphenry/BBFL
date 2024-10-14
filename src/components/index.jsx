@@ -2,6 +2,7 @@ export { AuthModal } from './AuthModal';
 export { ConfirmModal } from './ConfirmModal';
 export { NavBar } from './NavBar';
 export { LeagueScore } from './LeagueScore';
+export { LeagueScoreRow } from './LeagueScoreRow';
 export { LoginModal } from './LoginModal';
 export { Picks } from './Picks';
 export { ProtectedRoute } from './ProtectedRoute';

@@ -100,7 +100,7 @@ const App = () => {
 
           <Route element={<ProtectedRoute isAuthenticated={user !== null}/>}>
             <Route index path='/' element={<Picks supabase={supabase} user={user} userId={userId} weekId={weekId} weekType={weekType}/>} />
-            <Route path='league-score' element={<LeagueScore />} />
+            <Route path='league-score' element={<LeagueScore supabase={supabase}/>} />
             <Route path='week-scores' element={<WeekScores supabase={supabase} user={user} weekId={weekId} weekType={weekType}/>} />
             <Route path='rules' element={<Rules/>}/>
           </Route>
