@@ -1,3 +1,33 @@
+.week-scores-container
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.button-row
+{
+  display: flex;
+  align: right;
+}
+
+.close-button
+{
+  border: 2px solid blue;
+  margin-left: auto;
+}
+
+.filter-container
+{
+  align: left;
+  display: flex;
+}
+
+.filter-button
+{
+  border: 2px solid red;
+  background: red;
+}
+
 .week-scores-table-container
 {
   background-color: red;
