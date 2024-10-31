@@ -1,12 +1,21 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+import FunctionsIcon from '@mui/icons-material/Functions';
+import GavelIcon from '@mui/icons-material/Gavel';
+import ScoreboardIcon from '@mui/icons-material/Scoreboard';
+import SportsFootballIcon from '@mui/icons-material/SportsFootball';
+
 import './TabDrawer.css';
+
 
 import {
   Drawer,
   Button
 } from '@mui/material';
+
+import './TabDrawer.css';
+
 
 const TabDrawer = (props) => {
   const {
@@ -16,20 +25,24 @@ const TabDrawer = (props) => {
 
   const pages = [
     {
+      icon: <SportsFootballIcon />,
       name: 'Make Picks',
       path: '',
     },
     {
-      name: 'Check League Score',
+      icon: <ScoreboardIcon />,
+      name: 'Week Standings',
+      path: 'week-scores',
+    },
+    {
+      icon: <FunctionsIcon />,
+      name: 'Season Standings',
       path: 'league-score',
     },
     {
+      icon: <GavelIcon />,
       name: 'Rules',
       path: 'rules',
-    },
-    {
-      name: 'Week Scores',
-      path: 'week-scores',
     },
   ];
   const navigate = useNavigate();
@@ -60,10 +73,14 @@ const TabDrawer = (props) => {
           pages.map(page => `/${page.path}` !== location.pathname && (
                 <Button
                   variant = 'outlined'
-                    color = 'inherit'
+                  color = 'inherit'
                   className = 'page-button'
                   onClick = {() => movePage(page.path)}
+                  startIcon = {page.icon}
                   key = {page.name}
+                  sx={{
+                    justifyContent: 'flex-start',
+                  }}
                 >
                   {page.name}
                 </Button>
