@@ -9,8 +9,13 @@ import {
   TableRow,
 } from '@mui/material';
 
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { useDemoData } from '@mui/x-data-grid-generator';
+
 import { LeagueScoreRow } from '../LeagueScoreRow';
 import './LeagueScore.css';
+
+import { NUM_ACTIVE_PLAYERS } from '/src/Utils/constants';
 
 const LeagueScore = (props) => {
   const {
@@ -39,6 +44,54 @@ const LeagueScore = (props) => {
     return total_points;
   };
 
+  const create_columns = () => {
+    const columns = [
+      {
+        'field': 'user_email',
+        'headerName': 'Email',
+      },
+      {
+        'field': 'points',
+        'headerName': 'Points',
+      },
+    ];
+
+    const non_position_keys = new Set(['user_email', 'id', 'points']);
+    const position_keys = new Set([]);
+    for (const row of standings) {
+      for (const key in row) {
+        if (!non_position_keys.has(key)) {
+          position_keys.add(key);
+        }
+      }
+    }
+
+    for (const key of position_keys) {
+      columns.push({
+        'field': key,
+        'headerName': `${key}`,
+      });
+    }
+
+    return columns;
+  };
+
+  const data = {
+    'columns': create_columns(),
+    initialState: {
+      'columns': {
+        'columnVisibilitsyMoodel': {
+          'user_id': false,
+          'user_email': false,
+          'position': false,
+          'correct_predictions': false,
+          'week_number': false,
+        },
+      },
+    },
+    rows: standings,
+  };
+
   useEffect(() => {
     const get_standings = async () => {
       const week_results = {};
@@ -56,6 +109,10 @@ const LeagueScore = (props) => {
             position_count: {},
             user_email: curr_user.email,
           };
+
+          for (let pos = 1; pos <= NUM_ACTIVE_PLAYERS; ++pos) {
+            new_standings[user_results.user_id].position_count[pos] = 0;
+          }
         }
         const user_standings = new_standings[user_results.user_id];
 
@@ -71,36 +128,54 @@ const LeagueScore = (props) => {
       }
 
       const sorted_standings = Object.entries(new_standings).sort(([, a], [, b]) => b.points - a.points);
+      const flattened_standings = [];
 
-      setStandings(sorted_standings);
+      for (const [uid, user_standing] of sorted_standings) {
+        const curr_standing = structuredClone(user_standing);
+        const POSITION_SUFFIX = [
+          'st',
+          'nd',
+          'rd',
+        ];
+        for (const pos in curr_standing.position_count) {
+          const pos_int = parseInt(pos);
+          if (pos_int > NUM_ACTIVE_PLAYERS)
+            continue;
+          const relative_pos = parseInt(pos) - 1;
+          const pos_suffix = relative_pos >= POSITION_SUFFIX.length ?
+            'th' : POSITION_SUFFIX[relative_pos];
+          let key = `${pos}${pos_suffix}`;
+          curr_standing[key] = curr_standing.position_count[pos];
+        }
+        delete curr_standing.position_count;
+        curr_standing.id = uid;
+
+        if (curr_standing.points > 0) {
+          flattened_standings.push(curr_standing);
+        }
+      }
+      setStandings(flattened_standings);
     }
 
     get_standings();
   }, []);
 
   return Object.keys(standings).length > 0 && (
-    <TableContainer component={Paper} sx = {{background: '#353839', color: 'white'}}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow sx={{color: 'white'}}>
-            <TableCell sx={{color: 'white'}}>User Email</TableCell>
-            <TableCell sx={{color: 'white'}}>Points</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {standings.map((user_info) => {
-            const [UID_INDEX, USER_STANDINGS_INDEX] = [0, 1];
-            return (
-              <LeagueScoreRow
-                key={user_info[UID_INDEX]}
-                user_standings={user_info[USER_STANDINGS_INDEX]}
-              />
-            );
-
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      <DataGrid
+        columns={data.columns}
+        rows={data.rows}
+        sx={{
+          boxShadow: 0,
+          border: 1,
+          borderColor: 'primary',
+          color: 'white',
+          '& .MuiDataGrid-columnHeaders': {
+            color: 'black',
+          },
+        }}
+    />
+    </div>
   );
 };
 

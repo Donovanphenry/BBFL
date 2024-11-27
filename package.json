@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.8",
     "@mui/x-data-grid": "^7.21.0",
+    "@mui/x-data-grid-generator": "^7.22.3",
     "@supabase/auth-helpers-react": "^0.4.2",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/supabase-js": "^2.33.2",
