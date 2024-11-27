@@ -6,9 +6,6 @@ import {
   Collapse,
   Dialog,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Table,
   TableBody,
@@ -23,6 +20,9 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 import CloseIcon from '@mui/icons-material/Close';
+import DifferenceIcon from '@mui/icons-material/Difference';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import TuneIcon from '@mui/icons-material/Tune';
 
 import { WeekScoreRow } from '../WeekScoreRow';
@@ -42,17 +42,21 @@ const WeekScores = (props) => {
     user,
     weekId,
   } = props;
+  const [displayPicks, setDisplayPicks] = useState(false);
   const [userResults, setUserResults] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState({
     'diff_picks': {
       'active': false,
-      'label': 'Show differing picks only',
+      'label': 'Toggle Diffs',
     },
   });
   const [fixtures, setFixtures] = useState([]);
   const FILTER_MAP = {
     'diff_picks': (pick) => pick.diff,
+  };
+  const ICON_MAP = {
+    'diff_picks': <DifferenceIcon/>
   };
 
   let pick_type = process.env.NODE_ENV === 'development' ? "user_picks" : "user_picks";
@@ -145,59 +149,34 @@ const WeekScores = (props) => {
 
   const handleFilterChanged = (filter_id) => {
     const new_filters = structuredClone(filters);
-    new_filters[filter_id].active = !new_filters[filter_id].active;
-
+    const active = !new_filters[filter_id].active;
+    new_filters[filter_id].active = active;
     setFilters(new_filters);
-  }
+  };
+
+  const handleToggleDisplay = () => {
+    setDisplayPicks(!displayPicks);
+  };
 
   return Object.keys(userResults).length > 0 && (
     <div className='week-scores-container'>
-      <Dialog
-        open={filterOpen}
-        onClose={() => setFilterOpen(false)}
-      >
-        <div className='button-row'>
-          <IconButton sx={{'marginLeft': 'auto'}}>
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <List>
-          {
-            Object.keys(filters).map((filter_id) => (
-              <ListItem button onClick={() => handleFilterChanged(filter_id)}
-                key={filter_id}
-              >
-                <Checkbox
-                  checked={filters[filter_id].active}
-                />
-                <ListItemText>
-                  {filters[filter_id].label}
-                </ListItemText>
-              </ListItem>
-            ))
-          }
-        </List>
-        <Button
-          variant='contained'
-          size='medium'
-          sx={{
-            width: 'auto',
-            alignSelf: 'center',
-            my: 2,
-          }}
-          onClick={() => setFilterOpen(false)}
-        >
-          Submit
-        </Button>
-      </Dialog>
-
       <div className='filter-container'>
+        {Object.keys(filters).map((filter_id) => (
+          <Button
+            onClick={() => handleFilterChanged(filter_id)}
+            key={filter_id}
+            size='small'
+            startIcon={ICON_MAP[filter_id]}
+          >
+            {filters[filter_id].label}
+          </Button>
+        ))}
         <Button
-          className='filter-button'
-          onClick={() => setFilterOpen(true)}
-          startIcon={<TuneIcon />}
+          onClick={() => handleToggleDisplay()}
+          size='small'
+          startIcon={displayPicks ? <PlaylistRemoveIcon/> : <PlaylistAddIcon/>}
         >
-          Filter
+          {displayPicks ? 'Minimize' : 'Expand'} all
         </Button>
       </div>
 
@@ -213,7 +192,12 @@ const WeekScores = (props) => {
           <TableBody>
             {Object.keys(userResults).map((user) => {
               return (
-                <WeekScoreRow key={user.user_email} fixtures={fixtures} user={userResults[user]} />
+                <WeekScoreRow
+                  displayPicks={displayPicks}
+                  fixtures={fixtures}
+                  key={user.user_email}
+                  user={userResults[user]}
+                />
               );
 
             })}

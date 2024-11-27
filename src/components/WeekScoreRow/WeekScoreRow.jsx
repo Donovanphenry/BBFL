@@ -24,8 +24,12 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import './WeekScoreRow.css';
 
 const WeekScoreRow = props => {
-  const { fixtures, user } = props;
-  const [open, setOpen] = useState(false);
+  const { displayPicks, fixtures, user } = props;
+  const [open, setOpen] = useState(displayPicks);
+
+  useEffect(() => {
+    setOpen(displayPicks);
+  }, [displayPicks]);
 
   return (
     <React.Fragment>
