@@ -9,8 +9,10 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
+import {
+  DataGrid,
+  GridToolbar,
+} from '@mui/x-data-grid';
 
 import { LeagueScoreRow } from '../LeagueScoreRow';
 import './LeagueScore.css';
@@ -21,6 +23,7 @@ const LeagueScore = (props) => {
   const {
     supabase,
   } = props;
+
   const [standings, setStandings] = useState([]);
 
   let pick_type = process.env.NODE_ENV === 'development' ? "dev_week_results" : "week_results";
@@ -49,10 +52,13 @@ const LeagueScore = (props) => {
       {
         'field': 'user_email',
         'headerName': 'Email',
+        'headerClassName': 'email-header',
+        'width': '150',
       },
       {
         'field': 'points',
-        'headerName': 'Points',
+        'headerName': 'Pts',
+        'headerClassName': 'points-header',
       },
     ];
 
@@ -78,7 +84,7 @@ const LeagueScore = (props) => {
 
   const data = {
     'columns': create_columns(),
-    initialState: {
+    'initialState': {
       'columns': {
         'columnVisibilitsyMoodel': {
           'user_id': false,
@@ -163,13 +169,13 @@ const LeagueScore = (props) => {
   return Object.keys(standings).length > 0 && (
     <div>
       <DataGrid
-        columns={data.columns}
-        rows={data.rows}
+        {...data}
         sx={{
           boxShadow: 0,
           border: 1,
           borderColor: 'primary',
           color: 'white',
+          fontSize: '13px',
           '& .MuiDataGrid-columnHeaders': {
             color: 'black',
           },
