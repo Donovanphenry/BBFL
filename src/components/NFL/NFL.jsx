@@ -150,11 +150,7 @@ const NFL = (props) => {
     const [SUNDAY, MONDAY, SATURDAY] = [0, 1, 6];
     const isolated_days = new Set(['Wednesday', 'Thursday', 'Friday']);
     const combined_days = new Set([SUNDAY, MONDAY, SATURDAY]);
-
-    if (isolated_days.has(kickoff_day) && curr_date_la <= kickoff_date)
-      return false;
-    if (isolated_days.has(kickoff_day))
-      return true;
+    const earliest = {};
 
     let earliest_combined_fixture_date = curr_date_la;
     for (const fixture of fixtures)
@@ -162,6 +158,21 @@ const NFL = (props) => {
       const fixture_date_la = new Date(new Date(fixture.kickoff_time).toLocaleString("en-US", {
         timeZone: user_timezone,
       }));
+      const fixture_kickoff_day = new Intl.DateTimeFormat(
+        'en-US',
+        {
+          weekday: 'long',
+          user_timezone
+        }
+      ).format(fixture_date_la);
+      let earliest_key = 'Rest';
+      if (isolated_days.has(fixture_kickoff_day)) {
+        earliest_key = fixture_kickoff_day;
+      }
+
+      if (!earliest[earliest_key] || fixture_date_la < earliest[earliest_key]) {
+        earliest[earliest_key] = fixture_date_la;
+      }
 
       if (combined_days.has(fixture_date_la.getDay()) && fixture_date_la < earliest_combined_fixture_date)
       {
@@ -169,7 +180,11 @@ const NFL = (props) => {
       }
     }
 
-    if (curr_date_la <= earliest_combined_fixture_date)
+    let earliest_key2 = 'Rest';
+    if (isolated_days.has(kickoff_day)) {
+      earliest_key2 = kickoff_day
+    }
+    if (curr_date_la <= earliest[earliest_key2])
       return false;
     return true;
   };
