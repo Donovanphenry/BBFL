@@ -148,7 +148,7 @@ const NFL = (props) => {
     }));
 
     const [SUNDAY, MONDAY, SATURDAY] = [0, 1, 6];
-    const isolated_days = new Set(['Thursday', 'Friday']);
+    const isolated_days = new Set(['Wednesday', 'Thursday', 'Friday']);
     const combined_days = new Set([SUNDAY, MONDAY, SATURDAY]);
 
     if (isolated_days.has(kickoff_day) && curr_date_la <= kickoff_date)
