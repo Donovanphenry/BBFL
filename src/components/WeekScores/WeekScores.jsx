@@ -41,6 +41,7 @@ const WeekScores = (props) => {
     supabase,
     user,
     weekId,
+    weekType,
   } = props;
   const [displayPicks, setDisplayPicks] = useState(false);
   const [userResults, setUserResults] = useState([]);
@@ -69,7 +70,8 @@ const WeekScores = (props) => {
       const { data, error } = await supabase
         .from(pick_type)
         .select("user_id, pick_number, selected_team")
-        .eq("week_number", weekId);
+        .eq("week_number", weekId)
+        .eq("week_type", weekType);
 
       const curr_fixtures = await get_fixtures();
       const user_map = {};
