@@ -30,6 +30,7 @@ const get_curr_day_of_week = async () => {
 }
 
 const get_week_num = async () => {
+  return 1;
   const curr_day_of_week = get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
@@ -70,7 +71,8 @@ const get_fixtures = async () => {
   const data = await res.json();
   const year_of_season = data.season.year;
 
-  const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  // const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
+  const week_url = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/3/weeks/1?lang=en&region=us'
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
 
@@ -245,7 +247,7 @@ const extract_fixtures = async (evt, season_type) => {
 
 
     let record_url = competitor_data.record['$ref'].replace(/^http:/, 'https:');
-    record_url = record_url.replace(/types\/\d+/, `types/${season_type}`);
+    record_url = record_url.replace(/types\/\d+/, `types/2`);
     const record_res = await fetch(record_url);
     const record_data = await record_res.json();
 
