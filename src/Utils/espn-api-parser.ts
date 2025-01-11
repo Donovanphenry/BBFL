@@ -61,6 +61,7 @@ const get_week_num = async () => {
 
 const get_fixtures = async () => {
   const curr_day_of_week = await get_curr_day_of_week();
+  const week_type = await get_week_type();
 
   // Create a new Date object to represent the current date and time
   const currentDate = new Date();
@@ -72,9 +73,10 @@ const get_fixtures = async () => {
   const year_of_season = data.season.year;
 
   // const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
-  const week_url = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/3/weeks/1?lang=en&region=us'
+  const week_url = `https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/${week_type}/weeks/1?lang=en&region=us`
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
+  console.log('week_url = ',week_url);
 
   let week_num = week_data.number;
   if (!week_num)
@@ -116,6 +118,8 @@ const get_user_fixtures = async (setFixtures, supabase) => {
 
   const fixtures = await get_fixtures();
   const week_num = await get_week_num();
+  const week_type = await get_week_type();
+  console.log('week_type = ', week_type);
 
   const user_id = await user.id;
   let user_picks = [];
@@ -126,7 +130,8 @@ const get_user_fixtures = async (setFixtures, supabase) => {
       .from(pick_type)
       .select("*")
       .eq("user_id", user_id)
-      .eq("week_number", week_num);
+      .eq("week_number", week_num)
+      .eq("week_type", week_type);
 
     if (error) {
       console.error("Erreur lors de la récupération des données :", error);
