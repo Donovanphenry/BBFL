@@ -104,8 +104,10 @@ const LeagueScore = (props) => {
 
       const { data, error } = await supabase
         .from(pick_type)
-        .select("user_id, position, correct_predictions, week_number");
+        .select("user_id, position, correct_predictions, week_number, week_type");
 
+      const playoff_points = {
+      };
       const new_standings = {};
 
       for (let user_results of data) {
@@ -113,6 +115,7 @@ const LeagueScore = (props) => {
           const { data: { user: curr_user }, error } = await supabase.auth.admin.getUserById(user_results.user_id);
           new_standings[user_results.user_id] = {
             position_count: {},
+            playoff_points: 0,
             user_email: curr_user.email,
           };
 
@@ -125,11 +128,17 @@ const LeagueScore = (props) => {
         if (!user_standings.position_count[user_results.position]) {
           user_standings.position_count[user_results.position] = 0;
         }
-        user_standings.position_count[user_results.position] += 1;
+
+        if (user_results.week_type === 2) {
+          user_standings.position_count[user_results.position] += 1;
+        } else if (user_results.week_type == 3) {
+          user_standings.playoff_points += user_results.correct_predictions - user_results.incorrect_predictions;
+        }
 
       }
 
       for (let uid in new_standings) {
+        console.log('new_standings=  ', new_standings)
         new_standings[uid].points = calculate_points(new_standings[uid]);
       }
 
