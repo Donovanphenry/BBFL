@@ -27,6 +27,7 @@ const LeagueScore = (props) => {
   const [standings, setStandings] = useState([]);
 
   let pick_type = process.env.NODE_ENV === 'development' ? "dev_week_results" : "week_results";
+  pick_type = 'week_results';
 
   const calculate_points = (user_standings) => {
     // Absolutely heinous hardcoding. But I'm lazy
@@ -43,6 +44,7 @@ const LeagueScore = (props) => {
       const position_value = POINT_MAP[position] ? POINT_MAP[position] : 0;
       total_points += user_standings.position_count[position] * position_value;
     }
+    total_points += user_standings.playoff_points;
 
     return total_points;
   };
@@ -104,10 +106,8 @@ const LeagueScore = (props) => {
 
       const { data, error } = await supabase
         .from(pick_type)
-        .select("user_id, position, correct_predictions, week_number, week_type");
+        .select("user_id, position, correct_predictions, incorrect_predictions, week_number, week_type");
 
-      const playoff_points = {
-      };
       const new_standings = {};
 
       for (let user_results of data) {
@@ -138,7 +138,6 @@ const LeagueScore = (props) => {
       }
 
       for (let uid in new_standings) {
-        console.log('new_standings=  ', new_standings)
         new_standings[uid].points = calculate_points(new_standings[uid]);
       }
 
