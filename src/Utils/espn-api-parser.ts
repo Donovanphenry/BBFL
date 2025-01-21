@@ -30,7 +30,7 @@ const get_curr_day_of_week = async () => {
 }
 
 const get_week_num = async () => {
-  const curr_day_of_week = get_curr_day_of_week();
+  const curr_day_of_week = await get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
   const currentDate = new Date();
