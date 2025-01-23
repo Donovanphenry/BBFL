@@ -30,13 +30,14 @@ const get_curr_day_of_week = async () => {
 }
 
 const get_week_num = async () => {
+  return 3; // ESPN Shitting the bed again.
   const curr_day_of_week = await get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
   const currentDate = new Date();
 
   // Create a new Date object with the UTC-7 offset for PDT (Pacific Daylight Time)
-  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
+  const url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl";
   const res = await fetch(url);
   const data = await res.json();
 
@@ -45,6 +46,7 @@ const get_week_num = async () => {
   const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
   const week_res = await fetch(week_url);
   const week_data = await week_res.json();
+
 
   let week_num = week_data.number;
   if (!week_num) {
