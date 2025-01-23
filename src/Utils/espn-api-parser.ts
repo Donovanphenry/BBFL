@@ -73,18 +73,7 @@ const get_fixtures = async () => {
   const data = await res.json();
   const year_of_season = data.season.year;
 
-   const week_url = data.season.type.week["$ref"].replace(/^http:/, 'https:');
-  //const week_url = `https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/${week_type}/weeks/1?lang=en&region=us`
-  const week_res = await fetch(week_url);
-  const week_data = await week_res.json();
-
-  let week_num = week_data.number;
-  if (!week_num)
-      week_num = 1;
-  if (curr_day_of_week == "Tuesday")
-  {
-    week_num += 1;
-  }
+  const week_num = await get_week_num();
 
   const season_type = data.season.type.type;
 
