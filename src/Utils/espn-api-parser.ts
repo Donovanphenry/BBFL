@@ -30,7 +30,6 @@ const get_curr_day_of_week = async () => {
 }
 
 const get_week_num = async () => {
-  return 3; // ESPN Shitting the bed again.
   const curr_day_of_week = await get_curr_day_of_week();
 
   // Create a new Date object to represent the current date and time
@@ -244,7 +243,8 @@ const extract_fixtures = async (evt, season_type) => {
     const record_res = await fetch(record_url);
     const record_data = await record_res.json();
 
-    competitor['record'] = record_data.items[0].summary;
+    const record_summary = record_data?.items?.[0]?.summary;
+    competitor['record'] = record_summary ? record_summary : '0-0';
     competitor['pick'] = 'none';
     competitor['score'] = `${competitor_score} pts`;
     competitor['winner'] = competitor_winner;
