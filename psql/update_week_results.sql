@@ -59,9 +59,6 @@ BEGIN
         winner_array := array_append(winner_array, winner);
     END LOOP;
 
-    -- Clear previous results in week_results table for the previous week
-    DELETE FROM dev_week_results WHERE week_number = prev_week;
-
     -- Create a temporary table to store user predictions and correct/incorrect counts
     CREATE TEMP TABLE temp_user_predictions AS
     SELECT id AS user_id, 0 AS correct_count, 0 AS incorrect_count
@@ -104,8 +101,8 @@ BEGIN
       WHERE user_id = user_record.id;
     END LOOP;
 
-    -- Insert into week_results with correct rankings and incorrect predictions
-    INSERT INTO dev_week_results (user_id, week_number, week_type, correct_predictions, incorrect_predictions, position)
+    -- Insert into week_results with correct rankings, and incorrect predictions
+    INSERT INTO week_results (user_id, week_number, week_type, correct_predictions, incorrect_predictions, position)
     SELECT
       user_id,
       curr_week,
