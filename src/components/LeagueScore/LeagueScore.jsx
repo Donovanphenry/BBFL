@@ -27,7 +27,6 @@ const LeagueScore = (props) => {
   const [standings, setStandings] = useState([]);
 
   let pick_type = process.env.NODE_ENV === 'development' ? "dev_week_results" : "week_results";
-  pick_type = 'week_results';
 
   const calculate_points = (user_standings) => {
     // Absolutely heinous hardcoding. But I'm lazy
