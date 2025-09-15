@@ -100,7 +100,7 @@ const get_user_fixtures = async (setFixtures, supabase) => {
   const user_res = await supabase.auth.getUser();
   if (user_res.error)
   {
-    console.error("Ouf: ", user_res.error);
+    console.error("Bordel: ", user_res.error);
   }
   const user = user_res.data.user;
 

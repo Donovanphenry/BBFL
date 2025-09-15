@@ -60,7 +60,7 @@ const WeekScores = (props) => {
     'diff_picks': <DifferenceIcon/>
   };
 
-  let pick_type = process.env.NODE_ENV === 'development' ? "user_picks" : "user_picks";
+  let pick_type = process.env.NODE_ENV === 'development' ? "dev_user_picks" : "user_picks";
 
   useEffect(() => {
     const get_all_users_picks = async () => {
