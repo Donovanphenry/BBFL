@@ -51,10 +51,6 @@ const get_week_num = async () => {
   if (!week_num) {
     week_num = 1;
   }
-  if (curr_day_of_week == "Tuesday")
-  {
-    week_num += 1;
-  }
 
   return week_num;
 }

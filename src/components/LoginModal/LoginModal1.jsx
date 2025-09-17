@@ -24,12 +24,18 @@ export default function LoginModal(props) {
 
   useEffect(() => {
     const { data: { subscription : authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+      if (event === "SIGNED_IN") {
+        navigate(loc.state?.from?.pathname || '/');
+      }
+
+      if (event === "INITIAL_SESSION") {
         if (session) {
           navigate(loc.state?.from?.pathname || '/');
         }
-      } else {
-        return <Navigate to='/login'/>;
+      }
+
+      if (event === "SIGNED_OUT") {
+        navigate("/login");
       }
     });
 
@@ -37,6 +43,8 @@ export default function LoginModal(props) {
       authListener?.unsubscribe();
     };
   }, []);
+
+  const REDIRECT_URL = window.location.origin + '/';
 
   return (
     <div className='modalBackdrop'>
@@ -46,6 +54,7 @@ export default function LoginModal(props) {
           appearance={{ theme: ThemeSupa }}
           theme="dark"
           providers={['google']}
+          redirectTo={REDIRECT_URL}
         />
       </header>
     </div>
