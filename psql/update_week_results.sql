@@ -40,7 +40,7 @@ BEGIN
     curr_year = (data->>'year')::int;
 
     curr_week := (data->'type'->'week'->>'number')::int;
-    prev_week := curr_week - 1;
+    prev_week := curr_week;
 
     curr_week_type := (data->'type'->>'type')::int;
     prev_week_type := curr_week_type;
