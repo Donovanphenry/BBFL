@@ -128,13 +128,17 @@ const LeagueScore = (props) => {
           user_standings.position_count[user_results.position] = 0;
         }
 
+        console.log('user_results = ', user_results);
         if (user_results.week_type === 2) {
           user_standings.position_count[user_results.position] += 1;
-        } else if (user_results.week_type == 3) {
+        } else if (user_results.week_type === 3) {
+          console.log('user_results.week_type = 3: ', user_results);
           user_standings.playoff_points += user_results.correct_predictions - user_results.incorrect_predictions;
         }
 
       }
+
+      console.log('new_standings = ', new_standings);
 
       for (let uid in new_standings) {
         new_standings[uid].points = calculate_points(new_standings[uid]);
