@@ -107,6 +107,8 @@ const LeagueScore = (props) => {
         .from(pick_type)
         .select("user_id, position, correct_predictions, incorrect_predictions, week_number, week_type");
 
+      console.log('data = ', data);
+
       const new_standings = {};
 
       for (let user_results of data) {
